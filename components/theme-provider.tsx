@@ -1,0 +1,15 @@
+"use client";
+
+import { useEffect } from "react";
+
+import { useOrdinoStore } from "@/lib/store";
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = useOrdinoStore((state) => state.theme);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
+  return <>{children}</>;
+}
