@@ -33,7 +33,7 @@ export function ProjectCard({ project }: { project: Project }) {
     <div
       onClick={handleOpenProjectPage}
       onKeyDown={(event) => {
-        if (event.key === "Enter") handleOpenProjectPage();
+        if (event.key === "Enter" && event.target === event.currentTarget) handleOpenProjectPage();
       }}
       role="link"
       tabIndex={0}
