@@ -19,13 +19,26 @@ export function ProjectCard({ project }: { project: Project }) {
     project.integrationIds.includes(integration.id),
   );
 
-  function handleOpen() {
+  function handleOpenChat(event: React.MouseEvent) {
+    event.stopPropagation();
     setActiveProjectId(project.id);
     router.push("/chat");
   }
 
+  function handleOpenProjectPage() {
+    router.push(`/projects/${project.id}`);
+  }
+
   return (
-    <div className="flex flex-col justify-between rounded-lg border border-border bg-card p-4">
+    <div
+      onClick={handleOpenProjectPage}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") handleOpenProjectPage();
+      }}
+      role="link"
+      tabIndex={0}
+      className="flex cursor-pointer flex-col justify-between rounded-lg border border-border bg-card p-4 hover:border-foreground/20"
+    >
       <div>
         <div className="flex items-center justify-between">
           <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent">
@@ -58,7 +71,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <Button
         variant="ghost"
         size="sm"
-        onClick={handleOpen}
+        onClick={handleOpenChat}
         className="mt-3 justify-start px-0 text-sm text-muted-foreground hover:text-foreground"
       >
         Open project
