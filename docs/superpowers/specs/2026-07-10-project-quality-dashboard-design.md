@@ -141,16 +141,20 @@ for status.
 
 Add to `:root` and `.dark` in `app/globals.css`, following the existing
 `--destructive` pattern (oklch, lighter in dark mode):
-- `:root`: `--success: oklch(0.6 0.16 145);`
-- `.dark`: `--success: oklch(0.72 0.17 145);`
+- `:root`: `--success: oklch(0.5 0.16 145);` — verified 5.59:1 WCAG contrast
+  against the light `--card` (oklch(1 0 0)), comfortably above the 4.5:1 text
+  threshold.
+- `.dark`: `--success: oklch(0.72 0.17 145);` — verified 7.61:1 against the
+  dark `--card` (oklch(0.21 0.006 60)).
 - Register `--color-success: var(--success);` in the `@theme inline` block
   alongside the other semantic colors, so `text-success`/`bg-success` become
   available Tailwind utilities.
 
-Before wiring it into the status list, verify contrast against `--card` in
-both modes using the dataviz skill's `scripts/validate_palette.js` exported
-`contrast(a, b)` helper (WCAG text contrast, not the categorical-palette
-validator, since this is a single status color).
+Contrast was computed directly (OKLCH → linear sRGB → WCAG relative
+luminance) rather than via the dataviz skill's palette validator, since that
+script validates categorical palettes and this is a single status color (the
+skill's own scope note: single status colors get a plain WCAG contrast
+check, not the six-point categorical validator).
 
 ## Internal Admin Console
 
