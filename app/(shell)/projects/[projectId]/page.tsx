@@ -24,6 +24,7 @@ export default function ProjectPage({
   const snapshot = getQualitySnapshot(projectId);
 
   useEffect(() => {
+    if (!project) return;
     setActiveProjectId(projectId);
     const latest = [...conversations]
       .filter((c) => c.projectId === projectId)
