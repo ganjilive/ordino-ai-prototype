@@ -34,9 +34,7 @@ export const integrationCatalog: Integration[] = [
     type: "github",
     name: "GitHub",
     description: "Code, PRs, CI runs, and coverage reports.",
-    status: "connected",
-    accountLabel: "ordino-labs/booking-website",
-    connectedAt: "2026-06-18",
+    status: "not-connected",
   },
   {
     id: "int-bitbucket",

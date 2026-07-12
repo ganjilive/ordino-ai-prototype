@@ -19,6 +19,7 @@ export interface Integration {
   status: IntegrationStatus;
   accountLabel?: string;
   connectedAt?: string;
+  repos?: string[];
 }
 
 export interface Project {

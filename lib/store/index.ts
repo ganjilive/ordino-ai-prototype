@@ -31,7 +31,7 @@ interface OrdinoState {
   createProject: (name: string, description: string) => string;
 
   integrations: Integration[];
-  connectIntegration: (id: string, accountLabel: string) => void;
+  connectIntegration: (id: string, accountLabel: string, repos?: string[]) => void;
   disconnectIntegration: (id: string) => void;
 
   teamMembers: TeamMember[];
@@ -81,7 +81,7 @@ export const useOrdinoStore = create<OrdinoState>()(
       },
 
       integrations: integrationCatalog,
-      connectIntegration: (id, accountLabel) =>
+      connectIntegration: (id, accountLabel, repos) =>
         set((state) => ({
           integrations: state.integrations.map((integration) =>
             integration.id === id
@@ -90,6 +90,7 @@ export const useOrdinoStore = create<OrdinoState>()(
                   status: "connected",
                   accountLabel,
                   connectedAt: new Date().toISOString().slice(0, 10),
+                  repos,
                 }
               : integration,
           ),
@@ -103,6 +104,7 @@ export const useOrdinoStore = create<OrdinoState>()(
                   status: "not-connected",
                   accountLabel: undefined,
                   connectedAt: undefined,
+                  repos: undefined,
                 }
               : integration,
           ),
