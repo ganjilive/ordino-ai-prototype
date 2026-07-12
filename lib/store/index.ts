@@ -39,8 +39,6 @@ interface OrdinoState {
 
   conversations: Conversation[];
   activeConversationId: string | null;
-  pinnedAgentId: string | "auto";
-  setPinnedAgentId: (id: string | "auto") => void;
   startConversation: (projectId: string) => string;
   setActiveConversationId: (id: string | null) => void;
   sendMessage: (projectId: string, content: string) => void;
@@ -128,8 +126,6 @@ export const useOrdinoStore = create<OrdinoState>()(
 
       conversations: seedConversations,
       activeConversationId: seedConversations[0]?.id ?? null,
-      pinnedAgentId: "auto",
-      setPinnedAgentId: (id) => set({ pinnedAgentId: id }),
       startConversation: (projectId) => {
         const id = makeId("conv");
         const conversation: Conversation = {
@@ -178,7 +174,7 @@ export const useOrdinoStore = create<OrdinoState>()(
           .reverse()
           .find((m) => m.role === "assistant")?.agentId;
 
-        const routing = routeMessage(content, state.pinnedAgentId, previousAgentId);
+        const routing = routeMessage(content, previousAgentId);
 
         const newMessages: ChatMessage[] = [userMessage];
         if (routing.switched) {

@@ -3,7 +3,6 @@
 import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 
-import { AgentPicker } from "@/components/chat/agent-picker";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -42,8 +41,7 @@ export function ChatInput({
         rows={2}
         className="resize-none border-none bg-transparent shadow-none focus-visible:ring-0"
       />
-      <div className="flex items-center justify-between px-1 pb-1">
-        <AgentPicker />
+      <div className="flex items-center justify-end px-1 pb-1">
         <Button
           type="submit"
           size="icon"

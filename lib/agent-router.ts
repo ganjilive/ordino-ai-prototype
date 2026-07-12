@@ -20,7 +20,6 @@ function findAgentByKeyword(message: string): string | undefined {
 
 export function routeMessage(
   message: string,
-  pinnedAgentId: string | "auto",
   previousAgentId: string | undefined,
 ): RoutingResult {
   const lower = message.toLowerCase();
@@ -32,18 +31,7 @@ export function routeMessage(
   let agentId: string;
   let content: string;
 
-  if (pinnedAgentId !== "auto") {
-    agentId = pinnedAgentId;
-    const scriptForAgent = scriptedResponses.find(
-      (response) =>
-        response.agentId === agentId &&
-        response.triggers.some((trigger) => lower.includes(trigger)),
-    );
-    content =
-      scriptForAgent?.content ??
-      genericFallbackByAgent[agentId] ??
-      "I can help with that — could you give me a bit more detail on what you'd like me to do?";
-  } else if (scriptMatch) {
+  if (scriptMatch) {
     agentId = scriptMatch.agentId;
     content = scriptMatch.content;
   } else {
