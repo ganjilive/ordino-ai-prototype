@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node drive.js)",
+      "Bash(curl -s http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__05b6a68a._.css)",
+      "Bash(curl -s http://localhost:3000/chat)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(git checkout *)",
+      "Bash(node -e ' *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/review-package e19d14a *)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/task-brief /Users/ganji/Projects/ordino-ai-prototype/docs/superpowers/plans/2026-07-10-project-quality-dashboard.md 2)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/review-package d217039 *)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/task-brief /Users/ganji/Projects/ordino-ai-prototype/docs/superpowers/plans/2026-07-10-project-quality-dashboard.md 3)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/review-package 54c3e6f 4e4eae7)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/task-brief /Users/ganji/Projects/ordino-ai-prototype/docs/superpowers/plans/2026-07-10-project-quality-dashboard.md 6)",
+      "Bash(npx tsc *)",
+      "Bash(/Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/review-package 8533a80 944ab39)",
+      "Bash(node /tmp/drive-project-page.js)",
+      "Read(//Users/ganji/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/requesting-code-review/**)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(npx --yes chromium-cli --help)",
+      "Bash(git ls-remote *)"
+    ],
+    "additionalDirectories": [
+      "/tmp",
+      "/private/tmp"
+    ]
+  }
+}

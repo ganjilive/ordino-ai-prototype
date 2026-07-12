@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 import { terminalScript } from "@/lib/ide/terminal-script";
 import type { TerminalDiff, TerminalStep } from "@/lib/ide/types";
@@ -141,10 +143,19 @@ export function TerminalPanel() {
       )}
 
       {finished && (
-        <div className="flex items-center gap-2 pt-2 text-[#4ec9b0]">
-          <span>{">"}</span>
-          <span className="animate-pulse">▍</span>
-        </div>
+        <>
+          <div className="flex items-center gap-2 pt-2 text-[#4ec9b0]">
+            <span>{">"}</span>
+            <span className="animate-pulse">▍</span>
+          </div>
+          <Link
+            href="/projects/proj-booking-website/prs/pr-tax-discount-order"
+            className="mt-2 flex w-fit items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[12px] text-[#4ec9b0] hover:bg-white/10"
+          >
+            View PR #490 in Ordino
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </>
       )}
     </div>
   );

@@ -44,6 +44,12 @@ interface OrdinoState {
   startConversation: (projectId: string) => string;
   setActiveConversationId: (id: string | null) => void;
   sendMessage: (projectId: string, content: string) => void;
+
+  dismissedFlowIds: string[];
+  toggleFlowDismissed: (flowId: string) => void;
+
+  requireVerificationPolicy: Record<string, boolean>;
+  setRequireVerificationPolicy: (projectId: string, required: boolean) => void;
 }
 
 export const useOrdinoStore = create<OrdinoState>()(
@@ -204,6 +210,20 @@ export const useOrdinoStore = create<OrdinoState>()(
           ),
         });
       },
+
+      dismissedFlowIds: [],
+      toggleFlowDismissed: (flowId) =>
+        set((state) => ({
+          dismissedFlowIds: state.dismissedFlowIds.includes(flowId)
+            ? state.dismissedFlowIds.filter((id) => id !== flowId)
+            : [...state.dismissedFlowIds, flowId],
+        })),
+
+      requireVerificationPolicy: {},
+      setRequireVerificationPolicy: (projectId, required) =>
+        set((state) => ({
+          requireVerificationPolicy: { ...state.requireVerificationPolicy, [projectId]: required },
+        })),
     }),
     {
       name: "ordino-prototype-store",
