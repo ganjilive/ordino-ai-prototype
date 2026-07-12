@@ -1,11 +1,12 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { ArrowUp, Sparkles } from "lucide-react";
+import { ArrowUp, Sparkles, TriangleAlert, Zap } from "lucide-react";
 
 import { allFilePaths } from "@/lib/ide/file-tree";
+import { proactiveDependencyWarningSteps } from "@/lib/ide/impact-analysis-fixture";
 import { routeIdeMessage } from "@/lib/ide/ordino-script";
-import type { IdeChatMessage } from "@/lib/ide/types";
+import type { IdeChatMessage, IdeScriptedStep } from "@/lib/ide/types";
 import { useIde } from "@/components/ide/ide-context";
 import { RecommendedFixCard } from "@/components/ide/recommended-fix-card";
 import { TestReviewCard } from "@/components/ide/test-review-card";
@@ -17,9 +18,12 @@ const INITIAL_MESSAGE: IdeChatMessage = {
     "Hi, I'm Ordino. I can see the Booking Website project is open. Ask me about a bug or code you'd like me to look into — I'll investigate and hand you a prompt for your coding agent.",
 };
 
+const DEPENDENT_AREAS_PROMPT =
+  "I want to identify the dependent areas that should be tested based on the change I did.";
+
 const SUGGESTED_PROMPTS = [
   "I have finished developing the feature. Please update tests and execute them locally.",
-  "I want to identify the dependent areas that should be tested based on the change I did.",
+  DEPENDENT_AREAS_PROMPT,
 ];
 
 function escapeRegExp(value: string): string {
@@ -57,6 +61,8 @@ export function OrdinoPanel() {
   const [messages, setMessages] = useState<IdeChatMessage[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
+  const [proactiveTriggered, setProactiveTriggered] = useState(false);
+  const [usedOfferIds, setUsedOfferIds] = useState<Set<string>>(new Set());
   const scrollRef = useRef<HTMLDivElement>(null);
   const nextIdRef = useRef(0);
 
@@ -69,19 +75,8 @@ export function OrdinoPanel() {
     return `msg-${nextIdRef.current}-${suffix}`;
   }
 
-  function sendMessage(trimmed: string) {
-    if (!trimmed || isThinking) return;
-
-    const userMessage: IdeChatMessage = {
-      id: nextId("user"),
-      role: "user",
-      content: trimmed,
-    };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+  function playSteps(steps: IdeScriptedStep[]) {
     setIsThinking(true);
-
-    const { steps } = routeIdeMessage(trimmed);
     let index = 0;
 
     function scheduleNext() {
@@ -96,6 +91,8 @@ export function OrdinoPanel() {
             content: step.content,
             fix: step.fix,
             review: step.review,
+            proactive: step.proactive,
+            offer: step.offer,
           },
         ]);
         if (index < steps.length) {
@@ -107,6 +104,40 @@ export function OrdinoPanel() {
     }
 
     scheduleNext();
+  }
+
+  function sendMessage(trimmed: string) {
+    if (!trimmed || isThinking) return;
+
+    const userMessage: IdeChatMessage = {
+      id: nextId("user"),
+      role: "user",
+      content: trimmed,
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+
+    const { steps } = routeIdeMessage(trimmed);
+    playSteps(steps);
+  }
+
+  function triggerProactiveEvent() {
+    if (isThinking || proactiveTriggered) return;
+
+    setProactiveTriggered(true);
+    const eventMessage: IdeChatMessage = {
+      id: nextId("event"),
+      role: "event",
+      content: "booking-website — pricing change pushed to main",
+    };
+    setMessages((prev) => [...prev, eventMessage]);
+    playSteps(proactiveDependencyWarningSteps);
+  }
+
+  function handleOfferSelect(message: IdeChatMessage) {
+    if (!message.offer || isThinking || usedOfferIds.has(message.id)) return;
+    setUsedOfferIds((prev) => new Set(prev).add(message.id));
+    playSteps(message.offer.followup);
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -124,43 +155,90 @@ export function OrdinoPanel() {
       </div>
 
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={message.role === "user" ? "flex justify-end" : "flex justify-start"}
-          >
-            <div
-              className={
-                message.role === "user"
-                  ? "ordino-gradient-bg max-w-[85%] rounded-lg px-3 py-2 text-[13px] text-white"
-                  : "max-w-[92%] space-y-2 text-[13px] leading-relaxed"
-              }
-            >
-              <div className={message.role === "assistant" ? "whitespace-pre-wrap" : undefined}>
-                <MessageContent content={message.content} />
+        {messages.map((message) => {
+          if (message.role === "event") {
+            return (
+              <div key={message.id} className="flex justify-center py-1">
+                <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-[#969696]">
+                  <Zap className="h-3 w-3 text-[#e5c07b]" />
+                  {message.content}
+                </div>
               </div>
-              {message.fix && <RecommendedFixCard fix={message.fix} />}
-              {message.review && <TestReviewCard review={message.review} />}
+            );
+          }
+
+          const offerUsed = usedOfferIds.has(message.id);
+
+          return (
+            <div
+              key={message.id}
+              className={message.role === "user" ? "flex justify-end" : "flex justify-start"}
+            >
+              <div
+                className={
+                  message.role === "user"
+                    ? "ordino-gradient-bg max-w-[85%] rounded-lg px-3 py-2 text-[13px] text-white"
+                    : message.proactive
+                      ? "max-w-[92%] space-y-2 rounded-md border-l-2 border-[#e5c07b] bg-white/[0.03] py-1.5 pl-2.5 text-[13px] leading-relaxed"
+                      : "max-w-[92%] space-y-2 text-[13px] leading-relaxed"
+                }
+              >
+                {message.proactive && (
+                  <div className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide text-[#e5c07b]">
+                    <TriangleAlert className="h-3 w-3" />
+                    Ordino flagged this
+                  </div>
+                )}
+                <div className={message.role === "assistant" ? "whitespace-pre-wrap" : undefined}>
+                  <MessageContent content={message.content} />
+                </div>
+                {message.fix && <RecommendedFixCard fix={message.fix} />}
+                {message.review && <TestReviewCard review={message.review} />}
+                {message.offer && !offerUsed && (
+                  <button
+                    onClick={() => handleOfferSelect(message)}
+                    disabled={isThinking}
+                    className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-[12px] text-[#cccccc] hover:bg-white/10 disabled:opacity-40"
+                  >
+                    {message.offer.label}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {isThinking && (
           <div className="flex justify-start text-[13px] text-[#969696]">Ordino is thinking…</div>
         )}
       </div>
 
       <div className="flex flex-col gap-1.5 border-t border-black/20 px-2 pt-2">
-        {SUGGESTED_PROMPTS.map((prompt) => (
+        {!proactiveTriggered && (
           <button
-            key={prompt}
             type="button"
             disabled={isThinking}
-            onClick={() => sendMessage(prompt)}
-            className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-left text-[12px] leading-snug text-[#cccccc] hover:bg-white/10 disabled:opacity-40"
+            onClick={triggerProactiveEvent}
+            className="flex items-center gap-1.5 rounded-md border border-dashed border-white/20 bg-white/[0.03] px-2.5 py-1.5 text-left text-[12px] leading-snug text-[#cccccc] hover:bg-white/10 disabled:opacity-40"
           >
-            {prompt}
+            <span className="rounded bg-white/10 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#969696]">
+              Demo
+            </span>
+            Simulate: pricing change lands in booking-website
           </button>
-        ))}
+        )}
+        {SUGGESTED_PROMPTS.filter((prompt) => !proactiveTriggered || prompt !== DEPENDENT_AREAS_PROMPT).map(
+          (prompt) => (
+            <button
+              key={prompt}
+              type="button"
+              disabled={isThinking}
+              onClick={() => sendMessage(prompt)}
+              className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-left text-[12px] leading-snug text-[#cccccc] hover:bg-white/10 disabled:opacity-40"
+            >
+              {prompt}
+            </button>
+          ),
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="p-2">

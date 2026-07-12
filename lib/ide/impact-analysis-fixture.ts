@@ -1,16 +1,6 @@
 import type { IdeScriptedStep } from "@/lib/ide/types";
 
-export const impactAnalysisSteps: IdeScriptedStep[] = [
-  {
-    delayMs: 700,
-    content:
-      "Scanning the repositories I have access to for anything touching the checkout total change: booking-website (this repo), booking-api, booking-mobile…",
-  },
-  {
-    delayMs: 1500,
-    content:
-      "Impact analysis for the calculateTotal() change in src/lib/pricing.ts:\n• booking-website — src/components/checkout/order-summary.tsx renders the total directly; e2e checkout flow depends on it.\n• booking-api — POST /checkout/quote recomputes the same total server-side for order confirmation emails.\n• booking-mobile — the checkout screen calls booking-api's quote endpoint and displays the same total.\n\nTests to run: pricing unit tests, checkout integration tests, and the booking-api quote endpoint tests. booking-mobile has no test covering the promo + tax case at all.",
-  },
+export const dependencyTestFollowupSteps: IdeScriptedStep[] = [
   {
     delayMs: 1300,
     content:
@@ -43,6 +33,39 @@ export const impactAnalysisSteps: IdeScriptedStep[] = [
         },
       ],
       commitMessage: "test: cover promo-code tax impact across booking-website, booking-api, booking-mobile",
+    },
+  },
+];
+
+export const impactAnalysisSteps: IdeScriptedStep[] = [
+  {
+    delayMs: 700,
+    content:
+      "Scanning the repositories I have access to for anything touching the checkout total change: booking-website (this repo), booking-api, booking-mobile…",
+  },
+  {
+    delayMs: 1500,
+    content:
+      "Impact analysis for the calculateTotal() change in src/lib/pricing.ts:\n• booking-website — src/components/checkout/order-summary.tsx renders the total directly; e2e checkout flow depends on it.\n• booking-api — POST /checkout/quote recomputes the same total server-side for order confirmation emails.\n• booking-mobile — the checkout screen calls booking-api's quote endpoint and displays the same total.\n\nTests to run: pricing unit tests, checkout integration tests, and the booking-api quote endpoint tests. booking-mobile has no test covering the promo + tax case at all.",
+  },
+  ...dependencyTestFollowupSteps,
+];
+
+export const proactiveDependencyWarningSteps: IdeScriptedStep[] = [
+  {
+    delayMs: 700,
+    content:
+      "The pricing change just landed in booking-website — checking what depends on it across your repos: booking-api, booking-mobile…",
+    proactive: true,
+  },
+  {
+    delayMs: 1500,
+    content:
+      "Heads up — this change isn't fully handled downstream yet.\n\nImpact analysis for the calculateTotal() change in src/lib/pricing.ts:\n• booking-website — src/components/checkout/order-summary.tsx renders the total directly; e2e checkout flow depends on it.\n• booking-api — POST /checkout/quote recomputes the same total server-side for order confirmation emails.\n• booking-mobile — the checkout screen calls booking-api's quote endpoint and displays the same total.\n\nTests to run: pricing unit tests, checkout integration tests, and the booking-api quote endpoint tests. booking-mobile has no test covering the promo + tax case at all.",
+    proactive: true,
+    offer: {
+      label: "Write the missing tests",
+      followup: dependencyTestFollowupSteps,
     },
   },
 ];

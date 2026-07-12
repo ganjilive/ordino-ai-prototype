@@ -47,12 +47,19 @@ export interface TestReview {
   commitMessage: string;
 }
 
+export interface StepOffer {
+  label: string;
+  followup: IdeScriptedStep[];
+}
+
 export interface IdeChatMessage {
   id: string;
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "event";
   content: string;
   fix?: RecommendedFix;
   review?: TestReview;
+  proactive?: boolean;
+  offer?: StepOffer;
 }
 
 export interface IdeScriptedStep {
@@ -60,6 +67,8 @@ export interface IdeScriptedStep {
   content: string;
   fix?: RecommendedFix;
   review?: TestReview;
+  proactive?: boolean;
+  offer?: StepOffer;
 }
 
 export type TerminalStepKind =
