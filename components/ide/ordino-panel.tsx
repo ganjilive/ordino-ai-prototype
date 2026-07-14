@@ -1,12 +1,13 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { ArrowUp, Sparkles, TriangleAlert, Zap } from "lucide-react";
+import { ArrowUp, MessagesSquare, Sparkles, TriangleAlert, Zap } from "lucide-react";
 
 import { allFilePaths } from "@/lib/ide/file-tree";
 import { proactiveDependencyWarningSteps } from "@/lib/ide/impact-analysis-fixture";
 import { routeIdeMessage } from "@/lib/ide/ordino-script";
-import type { IdeChatMessage, IdeScriptedStep } from "@/lib/ide/types";
+import type { IdeChatMessage, IdeScriptedStep, TestReview } from "@/lib/ide/types";
+import { githubOrgRepos, shortRepoName } from "@/lib/mock-data/github-repos";
 import { useIde } from "@/components/ide/ide-context";
 import { RecommendedFixCard } from "@/components/ide/recommended-fix-card";
 import { TestReviewCard } from "@/components/ide/test-review-card";
@@ -140,6 +141,26 @@ export function OrdinoPanel() {
     playSteps(message.offer.followup);
   }
 
+  function notifySlackForPr(review: TestReview, repoFullName: string) {
+    const message = review.slackNotificationsByRepo?.[repoFullName];
+    if (!message) return;
+
+    const repoMeta = githubOrgRepos.find((repo) => repo.fullName === repoFullName);
+    const leadName = repoMeta?.leadName ?? `${shortRepoName(repoFullName)} team`;
+
+    window.setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: nextId("slack"),
+          role: "event",
+          eventIcon: "slack",
+          content: `Slack → ${leadName}: ${message}`,
+        },
+      ]);
+    }, 800);
+  }
+
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     sendMessage(input.trim());
@@ -157,10 +178,12 @@ export function OrdinoPanel() {
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
         {messages.map((message) => {
           if (message.role === "event") {
+            const EventIcon = message.eventIcon === "slack" ? MessagesSquare : Zap;
+            const eventIconColor = message.eventIcon === "slack" ? "text-[#4ec9b0]" : "text-[#e5c07b]";
             return (
               <div key={message.id} className="flex justify-center py-1">
                 <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-[#969696]">
-                  <Zap className="h-3 w-3 text-[#e5c07b]" />
+                  <EventIcon className={`h-3 w-3 ${eventIconColor}`} />
                   {message.content}
                 </div>
               </div>
@@ -168,6 +191,7 @@ export function OrdinoPanel() {
           }
 
           const offerUsed = usedOfferIds.has(message.id);
+          const { review } = message;
 
           return (
             <div
@@ -193,7 +217,12 @@ export function OrdinoPanel() {
                   <MessageContent content={message.content} />
                 </div>
                 {message.fix && <RecommendedFixCard fix={message.fix} />}
-                {message.review && <TestReviewCard review={message.review} />}
+                {review && (
+                  <TestReviewCard
+                    review={review}
+                    onPrOpened={(repoFullName) => notifySlackForPr(review, repoFullName)}
+                  />
+                )}
                 {message.offer && !offerUsed && (
                   <button
                     onClick={() => handleOfferSelect(message)}

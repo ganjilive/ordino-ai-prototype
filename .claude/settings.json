@@ -22,7 +22,14 @@
       "Bash(npm init *)",
       "Bash(npm install *)",
       "Bash(npx --yes chromium-cli --help)",
-      "Bash(git ls-remote *)"
+      "Bash(git ls-remote *)",
+      "Bash(npx --yes playwright --version)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Bash(npx --yes playwright install chromium --with-deps)",
+      "Read(//tmp/**)",
+      "Read(//Users/ganji/Library/Caches/ms-playwright/**)",
+      "Bash(npx --yes -p playwright playwright install chromium)",
+      "Bash(node verify-proactive.mjs)"
     ],
     "additionalDirectories": [
       "/tmp",

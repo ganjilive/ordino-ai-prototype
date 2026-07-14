@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -54,9 +55,10 @@ function GithubRepoPickerDialog({
       <DialogHeader>
         <DialogTitle>Grant Ordino access to repositories</DialogTitle>
         <DialogDescription>
-          Choose which repositories in {GITHUB_ORG} Ordino can read, open PRs against, and run
-          tests in. This is a simulated connection for the prototype — no real credentials are
-          sent anywhere.
+          Choose which repositories in {GITHUB_ORG} Ordino can read and run tests in. For repos
+          your team owns, Ordino can commit changes directly; for repos owned by other teams,
+          Ordino opens a PR for their review instead. This is a simulated connection for the
+          prototype — no real credentials are sent anywhere.
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-2 py-4">
@@ -72,7 +74,12 @@ function GithubRepoPickerDialog({
               className="mt-0.5 h-4 w-4 shrink-0"
             />
             <span>
-              <span className="block font-medium">{repo.fullName}</span>
+              <span className="flex items-center gap-1.5">
+                <span className="font-medium">{repo.fullName}</span>
+                <Badge variant={repo.ownedByYourTeam ? "secondary" : "outline"}>
+                  {repo.ownedByYourTeam ? "Your team" : "Other team"}
+                </Badge>
+              </span>
               <span className="block text-xs text-muted-foreground">{repo.description}</span>
             </span>
           </label>

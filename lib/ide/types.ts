@@ -39,12 +39,24 @@ export interface RecommendedFix {
 export interface TestFileSummary {
   path: string;
   description: string;
+  /** Matches GithubRepoOption.fullName in lib/mock-data/github-repos.ts */
+  repo: string;
 }
 
 export interface TestReview {
   summary: string;
   files: TestFileSummary[];
-  commitMessage: string;
+  /**
+   * Keyed by repo fullName. For repos the developer's team owns, this is a
+   * commit message; for repos owned by another team, it's the PR title.
+   */
+  commitMessagesByRepo: Record<string, string>;
+  /**
+   * Keyed by repo fullName. Present only for repos owned by another team —
+   * the message body Ordino "sends" via Slack to that repo's lead when the
+   * PR is opened, explaining the change and the reasoning behind it.
+   */
+  slackNotificationsByRepo?: Record<string, string>;
 }
 
 export interface StepOffer {
@@ -60,6 +72,8 @@ export interface IdeChatMessage {
   review?: TestReview;
   proactive?: boolean;
   offer?: StepOffer;
+  /** Icon for role === "event" pills. Defaults to the Zap (proactive-trigger) icon when absent. */
+  eventIcon?: "zap" | "slack";
 }
 
 export interface IdeScriptedStep {

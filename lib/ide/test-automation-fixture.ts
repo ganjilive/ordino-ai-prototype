@@ -31,17 +31,22 @@ export const testAutomationSteps: IdeScriptedStep[] = [
         {
           path: "src/lib/pricing.test.ts",
           description: "Unit tests for calculateTotal() covering tax with and without a promo code.",
+          repo: "ordino-labs/booking-website",
         },
         {
           path: "src/components/checkout/order-summary.test.tsx",
           description: "Component test asserting the rendered total matches the post-discount tax.",
+          repo: "ordino-labs/booking-website",
         },
         {
           path: "e2e/checkout-promo-tax.spec.ts",
           description: "New end-to-end test for a multi-item cart checkout with a promo code applied.",
+          repo: "ordino-labs/booking-website",
         },
       ],
-      commitMessage: "test: add regression coverage for promo-code tax calculation",
+      commitMessagesByRepo: {
+        "ordino-labs/booking-website": "test: add regression coverage for promo-code tax calculation",
+      },
     },
   },
 ];

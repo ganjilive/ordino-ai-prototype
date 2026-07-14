@@ -14,7 +14,7 @@ export const dependencyTestFollowupSteps: IdeScriptedStep[] = [
   {
     delayMs: 900,
     content:
-      "That closes the gaps across all three repos. Here's what's ready for your review before committing:",
+      "That closes the gaps across all three repos. I can commit directly here in booking-website — but booking-api and booking-mobile are owned by other teams, so I'll open PRs there for their review instead:",
     review: {
       summary:
         "Filled cross-repo test gaps uncovered by the checkout total change — booking-website, booking-api, and booking-mobile all now cover the promo-code + tax path.",
@@ -22,17 +22,30 @@ export const dependencyTestFollowupSteps: IdeScriptedStep[] = [
         {
           path: "src/lib/pricing.test.ts",
           description: "booking-website — unit test for tax computed after the discount.",
+          repo: "ordino-labs/booking-website",
         },
         {
           path: "../booking-api/tests/checkout-quote.test.ts",
           description: "booking-api — integration test for the /checkout/quote endpoint's total.",
+          repo: "ordino-labs/booking-api",
         },
         {
           path: "../booking-mobile/tests/checkout-total.spec.ts",
           description: "booking-mobile — frontend test asserting the checkout screen matches the quote total.",
+          repo: "ordino-labs/booking-mobile",
         },
       ],
-      commitMessage: "test: cover promo-code tax impact across booking-website, booking-api, booking-mobile",
+      commitMessagesByRepo: {
+        "ordino-labs/booking-website": "test: cover promo-code tax impact after discount",
+        "ordino-labs/booking-api": "test: cover /checkout/quote promo-code tax impact",
+        "ordino-labs/booking-mobile": "test: cover checkout total match with quote endpoint",
+      },
+      slackNotificationsByRepo: {
+        "ordino-labs/booking-api":
+          "Opened a PR against booking-api: tests/checkout-quote.test.ts. booking-website just fixed a bug where the promo-code discount was applied after tax instead of before — POST /checkout/quote had the same ordering bug, so its computed total silently diverged from what checkout now shows. The PR adds a regression test asserting the quote endpoint applies tax after the discount. No production code changed on your side; flagging in case anything else depends on the old ordering.",
+        "ordino-labs/booking-mobile":
+          "Opened a PR against booking-mobile: tests/checkout-total.spec.ts. This follows a fix in booking-website where the promo-code discount was applied after tax instead of before, which also affects the total booking-api's /checkout/quote returns. The checkout screen renders that total directly, so it was at risk of showing a mismatched total with no test catching it. The PR adds a test asserting the checkout screen matches the quote endpoint's total — no app code changed, just closing the coverage gap.",
+      },
     },
   },
 ];
