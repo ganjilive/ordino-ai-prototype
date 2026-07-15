@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, SquareCode, Sun } from "lucide-react";
+import { Home, Moon, SquareCode, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,10 @@ export function TopBar() {
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-border px-4">
       <ProjectSwitcher />
       <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" onClick={() => router.push("/")}>
+          <Home className="h-4 w-4" />
+          Home
+        </Button>
         <Button variant="outline" size="sm" onClick={() => router.push("/ide")}>
           <SquareCode className="h-4 w-4" />
           Open IDE

@@ -10,7 +10,7 @@ export function TitleBar() {
     <div className="flex h-9 shrink-0 items-center bg-[#3c3c3c] px-3 text-[13px] text-[#cccccc]">
       <div className="flex flex-1 items-center gap-3">
         <button
-          onClick={() => router.push("/chat")}
+          onClick={() => router.push("/")}
           className="flex items-center gap-1.5 rounded px-2 py-1 text-xs text-[#cccccc]/80 hover:bg-white/10 hover:text-[#cccccc]"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
