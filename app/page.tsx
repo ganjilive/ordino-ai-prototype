@@ -54,6 +54,16 @@ export default function Home() {
           Read the Design Brief
         </a>
       </div>
+      <div className="mb-10 rounded-lg border border-border bg-card p-4">
+        <h2 className="text-sm font-semibold">The scenario</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          A developer on the booking-website team is fixing how checkout applies a promo-code
+          discount and tax — a change that quietly reaches into booking-api, a separate repo, in
+          a path with no test coverage there. Watch Ordino catch that cross-repo risk, verify the
+          flows it touches, and generate traceable tests — before a PR exists — from four
+          different vantage points below.
+        </p>
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {PRODUCT_SURFACES.map((surface) => (
           <ProductSurfaceCard key={surface.href} {...surface} />
