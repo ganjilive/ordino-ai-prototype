@@ -34,11 +34,17 @@ export const bannerSteps: TerminalCompanionStep[] = [
 ];
 
 export const SUGGESTED_QUESTIONS = [
-  "What's our test coverage?",
-  "Any flaky tests?",
-  "Is this safe to ship?",
+  { label: "What's our test coverage?", prompt: "What's our test coverage?" },
+  { label: "Any flaky tests?", prompt: "Any flaky tests?" },
+  { label: "Is this safe to ship?", prompt: "Is this safe to ship?" },
+  {
+    label: "Generate tests for the booking flow",
+    prompt:
+      "Generate front-end test automation for the critical booking flow at https://staging.booking-website.dev. Flow: search rooms → select dates → apply promo code → complete payment. Requirement details are in BOOK-482.",
+  },
 ];
 
+const GENERATE_TESTS_KEYWORDS = ["generate", "critical flow", "front-end test automation"];
 const COVERAGE_KEYWORDS = ["coverage", "tested"];
 const FLAKY_KEYWORDS = ["flaky", "flake"];
 const BUILD_KEYWORDS = ["build", "ci", "pipeline"];
@@ -48,6 +54,77 @@ const RISK_KEYWORDS = ["risk", "worried", "worry", "cross-repo", "booking-api"];
 
 export function answerQuestion(question: string): TerminalCompanionStep[] {
   const normalized = question.toLowerCase();
+
+  if (GENERATE_TESTS_KEYWORDS.some((keyword) => normalized.includes(keyword))) {
+    return [
+      { id: "tool-gen-jira", kind: "tool", delayMs: 500, text: "Jira(fetch BOOK-482)" },
+      {
+        id: "tool-result-gen-jira",
+        kind: "tool-result",
+        delayMs: 500,
+        text: "Acceptance criteria: guest can search rooms, select dates, apply a promo code, and complete payment without errors",
+      },
+      {
+        id: "tool-gen-launch",
+        kind: "tool",
+        delayMs: 600,
+        text: "Browser(launch → https://staging.booking-website.dev)",
+      },
+      { id: "tool-result-gen-launch", kind: "tool-result", delayMs: 450, text: "Page loaded (200 OK)" },
+      {
+        id: "tool-gen-search",
+        kind: "tool",
+        delayMs: 500,
+        text: "Browser(search rooms → dates: Aug 12–15)",
+      },
+      { id: "tool-result-gen-search", kind: "tool-result", delayMs: 400, text: "3 rooms found" },
+      {
+        id: "tool-gen-promo",
+        kind: "tool",
+        delayMs: 550,
+        text: "Browser(select room → apply promo code SAVE20)",
+      },
+      {
+        id: "tool-result-gen-promo",
+        kind: "tool-result",
+        delayMs: 450,
+        text: "Discount applied — total updated to $86.40",
+      },
+      { id: "tool-gen-pay", kind: "tool", delayMs: 550, text: "Browser(complete payment)" },
+      {
+        id: "tool-result-gen-pay",
+        kind: "tool-result",
+        delayMs: 450,
+        text: "Booking confirmed — confirmation #BW-10493",
+      },
+      {
+        id: "tool-gen-write",
+        kind: "tool",
+        delayMs: 600,
+        text: "Ordino(generate-playwright-spec --from-recording)",
+      },
+      {
+        id: "tool-result-gen-write",
+        kind: "tool-result",
+        delayMs: 500,
+        text: "Wrote e2e/booking-flow.e2e.spec.ts (64 lines)",
+      },
+      { id: "tool-gen-run", kind: "tool", delayMs: 600, text: "Bash(npx playwright test booking-flow)" },
+      { id: "tool-result-gen-run", kind: "tool-result", delayMs: 500, text: "1 passed (7.8s)" },
+      {
+        id: "traceability-gen",
+        kind: "traceability",
+        delayMs: 700,
+        text: "BOOK-482 → e2e/booking-flow.e2e.spec.ts — all 4 acceptance criteria covered.",
+      },
+      {
+        id: "answer-gen",
+        kind: "answer",
+        delayMs: 700,
+        text: "Done — walked the live booking flow end to end and generated e2e/booking-flow.e2e.spec.ts from it, replacing the flaky version flagged earlier. It's traced back to BOOK-482, so if that requirement changes, you'll know exactly which test to revisit.",
+      },
+    ];
+  }
 
   if (COVERAGE_KEYWORDS.some((keyword) => normalized.includes(keyword))) {
     return [

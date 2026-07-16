@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, SquareTerminal, TriangleAlert } from "lucide-react";
+import { ArrowLeft, Link2, SquareTerminal, TriangleAlert } from "lucide-react";
 
 import { answerQuestion, bannerSteps, SUGGESTED_QUESTIONS } from "@/lib/terminal/companion-script";
 import type { TerminalCompanionStep } from "@/lib/terminal/types";
@@ -38,6 +38,16 @@ function StepLine({ step }: { step: TerminalCompanionStep }) {
         <div className="flex gap-2 pt-3">
           <span className="text-[#4ec9b0]">{">"}</span>
           <span className="text-white">{step.text}</span>
+        </div>
+      );
+    case "traceability":
+      return (
+        <div className="my-2 rounded border border-[#4ec9b0]/40 bg-[#4ec9b0]/[0.06] p-2">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#4ec9b0]">
+            <Link2 className="h-3.5 w-3.5" />
+            Requirement traceability
+          </div>
+          <div className="mt-1 text-[#a3ded1]">{step.text}</div>
         </div>
       );
     case "answer":
@@ -170,12 +180,12 @@ export function TerminalCompanionView() {
             <div className="flex flex-wrap gap-1.5">
               {SUGGESTED_QUESTIONS.map((question) => (
                 <button
-                  key={question}
+                  key={question.prompt}
                   type="button"
-                  onClick={() => handleAsk(question)}
+                  onClick={() => handleAsk(question.prompt)}
                   className="rounded border border-white/10 bg-white/5 px-2 py-1 text-[12px] text-[#4ec9b0] hover:bg-white/10"
                 >
-                  {question}
+                  {question.label}
                 </button>
               ))}
             </div>
