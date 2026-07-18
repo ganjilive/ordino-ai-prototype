@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ordino — Idea Document</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#5a5a5a; --line:#e3e3e0; --bg:#fbfaf8;
+    --card:#ffffff; --accent:#b8442f; --accent-bg:#f7e9e5;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height:1.6;}
+  .wrap{max-width:860px; margin:0 auto; padding:56px 32px 96px;}
+  .kicker{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:10px;}
+  h1{font-size:34px; margin:0 0 12px; font-weight:600; letter-spacing:-0.01em;}
+  h2{font-size:21px; font-weight:600; margin:0 0 16px; padding-bottom:8px; border-bottom:1px solid var(--line);}
+  h3{font-size:15px; font-weight:600; margin:0 0 6px;}
+  p{margin:0 0 14px;}
+  .tagline{font-size:18px; color:var(--muted); margin:0 0 8px; max-width:660px;}
+  section{margin-top:48px;}
+  .tag{display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:100px; margin-bottom:8px;}
+  .tag.validated-strong{background:#e5f3ea; color:#2f7a4f;}
+  .tag.validated-research{background:var(--accent-bg); color:var(--accent);}
+  .tag.unverified{background:#fdf0dd; color:#a5670f;}
+  table{width:100%; border-collapse:collapse; margin-top:8px; font-size:13.5px;}
+  th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); font-weight:700;}
+  .status{display:inline-block; font-size:11px; font-weight:700; padding:3px 8px; border-radius:100px; white-space:nowrap;}
+  .status.crowded{background:#fdf0dd; color:#a5670f;}
+  .status.platform{background:var(--accent-bg); color:var(--accent);}
+  .status.horizon{background:#eee; color:var(--muted);}
+  .status.shipped{background:#e5f3ea; color:#2f7a4f;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin-bottom:14px;}
+  .card:last-child{margin-bottom:0;}
+  ol{margin:0; padding-left:20px;}
+  ol li{margin-bottom:10px;}
+  .problem-block{margin-top:48px; padding-top:36px; border-top:1px solid var(--line);}
+  .problem-block:first-of-type{margin-top:20px; border-top:none; padding-top:0;}
+  .hmw{font-size:21px; font-weight:600; color:var(--accent); margin:0 0 12px; line-height:1.35;}
+  .problem-context{font-size:14.5px; color:#2b2b2b; margin:0 0 16px; max-width:640px;}
+  .hypothesis{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px;}
+  .hyp-line{margin-bottom:12px; font-size:14.5px;}
+  .hyp-line:last-child{margin-bottom:0;}
+  .hyp-label{display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin-bottom:3px;}
+  .hyp-value{color:var(--ink);}
+  .parked{background:var(--card); border:1px dashed var(--line); border-radius:10px; padding:16px 20px; margin-top:14px;}
+  .existing{margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);}
+  .existing h4{font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); font-weight:700; margin:0 0 8px;}
+  .existing ul{margin:0 0 8px; padding-left:18px;}
+  .existing li{font-size:13px; color:#2b2b2b; margin-bottom:6px;}
+  .existing .verdict{font-size:13px; color:var(--accent); font-weight:600; margin:0;}
+  .win-detail{margin-top:12px; padding:14px 16px; border-top:1px solid var(--line); background:#f7fbf8; border-radius:0 0 8px 8px;}
+  .win-detail h5{font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:#2f7a4f; font-weight:700; margin:0 0 10px;}
+  .win-line{margin-bottom:10px; font-size:13.5px;}
+  .win-line:last-child{margin-bottom:0;}
+  .win-label{display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin-bottom:3px;}
+  .win-value{color:#1a1a1a;}
+  footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">Idea document</div>
+  <h1>Ordino — competitive reality, then the ideas</h1>
+  <p class="tagline">The shipped product, plus nine hypotheses for solving AI-era QA problems, researched against what already exists. Led by the finding that matters most — how crowded this space actually is — with the detailed hypotheses kept as an appendix.</p>
+
+  <section>
+    <h2>Already shipped: test automation</h2>
+    <span class="tag" style="background:#e5f3ea; color:#2f7a4f;">Shipped — in market today</span>
+    <p class="problem-context" style="margin-top:6px;">This isn't a hypothesis — it's the product Ordino has already built and released: a test automation tool for front-end, API, and mobile testing that a coding agent calls directly (via MCP tool-calling) to execute tests, rather than a human operating a separate testing tool.</p>
+    <div class="card">
+      <h3>Competitive reality</h3>
+      <p style="margin-bottom:10px;">This is the single most crowded category researched so far — a mature, well-funded market (AI testing tools sized at ~$687M in 2025, projected toward ~$3.8B by 2035), not an open wedge. Point-solution competitors across front-end, API, and mobile: <strong>Mabl, Katalon, Testim, QA Wolf, testRigor, Applitools, Virtuoso QA, Testsigma, ACCELQ, Panto AI, Sauce Labs, Checksum</strong>.</p>
+      <p style="margin-bottom:0;">More specifically relevant: the exact pattern of "an AI agent calling a tool to execute tests" — agentic test execution — is no longer novel either. It's already shipping in 2026 from multiple vendors: <strong>LambdaTest KaneAI, Mabl Agentic Tester, Sauce Labs AI Agents, Autify Aximo</strong>.</p>
+      <p class="verdict" style="color:var(--accent); font-weight:600; margin:10px 0 0;">Being in market already changes the question. It's not "should we build this" — it's "what makes our version worth choosing over well-funded, already-agentic incumbents": likely candidates are the agent-agnostic MCP packaging (works with any coding agent, not a walled-garden platform), the local-model option for organizations that can't send code externally, or tighter integration with the risk/blast-radius hypotheses above rather than standing alone.</p>
+      <div class="win-detail">
+        <h5>How Ordino could win</h5>
+        <div class="win-line"><span class="win-label">Target</span><span class="win-value">Ship test automation as a capability the customer's own coding agent calls, via open MCP tool-calling, plus a local/self-hosted execution mode so no code or test data has to leave the organization's environment.</span></div>
+        <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">KaneAI, Mabl Agentic Tester, and Sauce AI Agents are all agentic, but each locks the customer into that vendor's own platform and session model. None currently offer a fully local execution option — and vendor lock-in and compliance risk are documented as top reasons enterprises hold back from adopting AI testing tools in the first place.</span></div>
+        <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">No new dashboard to log into, no code leaving a regulated environment if that matters to them, and immediate use inside the workflow they've already adopted — the coding agent — instead of a sixth automation platform to manage and pay for separately.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Competitive landscape at a glance</h2>
+    <table>
+      <tr><th>Hypothesis</th><th>Status</th><th>Key players found</th><th>Path to win</th></tr>
+      <tr><td>0. Test automation (shipped product)</td><td><span class="status shipped">Shipped, most crowded</span></td><td>Mabl, Katalon, Testim, QA Wolf, testRigor, Applitools, Sauce Labs, KaneAI, Autify Aximo</td><td>Run inside whatever agent the customer already uses, with a local-execution option, instead of being another platform to log into</td></tr>
+      <tr><td>1. Cross-repo risk before a PR</td><td><span class="status platform">Crowded + platform risk</span></td><td>Riftmap, Qodo, GitHub Copilot</td><td>Scope tightly to app-code + coverage, stay usable from any agent, and feed the risk score instead of standing alone</td></tr>
+      <tr><td>2. What's worth testing / fill coverage gaps</td><td><span class="status crowded">Crowded</span></td><td>Develocity, CloudBees Smart Tests, Sealights, Appsurify, Qodo Cover, Qase</td><td>Generate tests based on cross-repo impact, the one boundary Qodo Cover doesn't cross</td></tr>
+      <tr><td>3. Deterministic trust/risk score</td><td><span class="status platform">Most crowded + platform risk</span></td><td>CodeRabbit, Greptile, Qodo, Atlassian Rovo, GitHub Copilot</td><td>Build the score from checkable facts, not model opinion, and let rival tools call it instead of competing to replace them</td></tr>
+      <tr><td>4. Standing quality/risk dashboard</td><td><span class="status crowded">Crowded</span></td><td>CodeScene, SonarQube, Cortex</td><td>Show only the org's own cross-repo risk trend, a view no incumbent currently produces</td></tr>
+      <tr><td>5. Auto-triage PRs by risk</td><td><span class="status crowded">Already productized</span></td><td>CodeAnt.ai, Greptile</td><td>Feed the score into existing triage tools via API instead of asking teams to switch tools</td></tr>
+      <tr><td>6. Requirements quality &amp; test planning <span class="tag" style="margin:0;">parked</span></td><td><span class="status platform">Crowded + platform risk</span></td><td>Jama Connect, IBM DOORS Next, Qase, QA Wolf, Mabl, Atlassian Rovo</td><td>Verify after the fact that a requirement was actually tested, rather than competing on authoring</td></tr>
+      <tr><td>7. Root cause analysis of failures <span class="tag" style="margin:0;">parked</span></td><td><span class="status crowded">Crowded</span></td><td>Ranger, TestDino, Perfecto, Galileo, Qase, Mabl</td><td>Trace failures to the originating cross-repo change, not just the failing test's own logs</td></tr>
+      <tr><td>8. Flaky test detection/management <span class="tag" style="margin:0;">parked</span></td><td><span class="status crowded">Crowded</span></td><td>TestDino, BuildPulse, Atlassian Flakinator, Mabl, Qase, TestMu AI</td><td>Separate real fragile dependencies from noise, instead of quarantining everything the same way</td></tr>
+      <tr><td>9. Post-merge / release testing <span class="tag" style="margin:0;">parked</span></td><td><span class="status horizon">Established, later horizon</span></td><td>Develocity, CloudBees Smart Tests, Appsurify, Sealights</td><td>Reuse the pre-PR graph for release selection so pre-merge and pre-release share one risk model</td></tr>
+    </table>
+    <p style="font-size:13px; color:var(--muted); margin-top:10px;">Also on the radar, but adjacent rather than a point-solution competitor: <strong>8090.ai</strong> — a large, well-funded enterprise "AI-native software factory" (governance/documentation/multi-model orchestration), not competing on any single hypothesis above.</p>
+  </section>
+
+  <section>
+    <h2>What this means strategically</h2>
+    <p>The question this table raises isn't "which capability is unclaimed" — almost none are. It's: <strong>given that every individual capability here will get built by someone, including two platform incumbents, what's actually defensible for Ordino?</strong></p>
+    <div class="card">
+      <h3>Option A — Compete head-on on the narrowest wedge left</h3>
+      <p>Hypothesis 1, application-level cross-repo risk, is still the least crowded — but Qodo and GitHub Copilot are both moving into it, and GitHub owns the platform. This means racing, not claiming open ground.</p>
+    </div>
+    <div class="card">
+      <h3>Option B — Stop trying to own a point capability; become the layer that ties signals together for one org</h3>
+      <p>No competitor found connects blast radius, coverage, requirements, and notifications specifically to one organization's own repos and history in a single, always-current system. Each does its own slice well, generically, across any customer. Integration and organization-specific context — not any one feature — may be the more durable moat.</p>
+    </div>
+    <div class="card">
+      <h3>Option C — Find an underserved niche, not an underserved capability</h3>
+      <p>Every capability is contested in general, but not necessarily for every team size, industry, or compliance context. The differentiation may be in who this serves, not what it does.</p>
+    </div>
+    <div class="card">
+      <h3>Option D — Reconsider the bet honestly</h3>
+      <p>Two platform incumbents (Atlassian, GitHub) and one well-funded, fast-moving competitor (Qodo) are already building toward this space from positions of real structural advantage. Worth asking plainly whether this is still the right place to compete before committing further.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Appendix: full hypothesis detail</h2>
+    <p style="font-size:13px; color:var(--muted);">The nine hypotheses in full — problem framed as "How might we," idea framed as a testable hypothesis, and the research behind each status above.</p>
+
+  <div class="problem-block">
+    <span class="tag validated-research">Validated — developer pain, confirmed by independent research</span>
+    <h2 class="hmw" style="border:none; padding:0;">How might we help developers know what their change affects before they open a pull request?</h2>
+    <p class="problem-context">Today, a change in one repo can silently break something in another, and nobody finds out until CI fails elsewhere — sometimes hours or days later.</p>
+    <div class="hypothesis">
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">software teams working across multiple repositories</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">faster, less stressful merges with fewer surprise breakages</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">an automatic check that shows what a local change affects — which other repos and functions, and whether they're covered by tests — before a pull request is opened, and again as a safety net when the PR is opened</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">published research on pull-request review confirms developers and reviewers want this kind of change-impact information to make safer decisions, and the earlier a problem is caught, the cheaper it is to fix</span></div>
+    </div>
+    <div class="existing">
+      <h4>Existing solutions</h4>
+      <ul>
+        <li><strong>Riftmap</strong> — live, agent-callable blast-radius graph, but at the infrastructure/build-artifact layer (Terraform, Docker, Helm, CI includes), explicitly not application code or test coverage.</li>
+        <li><strong>Qodo</strong> — a "context engine for multi-repo intelligence," alongside Git, IDE, and CLI plugins, from a $50M-funded, actively-shipping competitor. Scope not yet confirmed to be identical to this hypothesis, but close enough to require direct evaluation before relying on this as a differentiator.</li>
+        <li><strong>GitHub Copilot</strong>'s agentic code review (GA) explicitly triggers deeper analysis for "cross-service changes" — GitHub, the platform hosting the repos, is signaling movement into this exact territory.</li>
+        <li>Academic research (change-impact analysis combining call-graph dependency + history mining, published in <em>Empirical Software Engineering</em>) validates the need, but isn't a shipped product.</li>
+      </ul>
+      <p class="verdict">The highest-risk hypothesis, not the safest. Qodo and GitHub are both moving into this territory, and GitHub owns the platform Ordino would need to operate on top of.</p>
+      <div class="win-detail">
+        <h5>How Ordino could win</h5>
+        <div class="win-line"><span class="win-label">Target</span><span class="win-value">A blast-radius check scoped precisely to application code and test coverage across repos — deliberately not the infrastructure/build-artifact layer Riftmap already owns — callable from any coding agent via MCP, with its output feeding directly into the risk score (hypothesis 3) rather than shipping as its own separate report.</span></div>
+        <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">Riftmap explicitly stops at infrastructure. Qodo and GitHub Copilot are moving into this territory, but each ties the capability to its own ecosystem — Qodo's IDE/CLI plugins, GitHub's own platform. Ordino's version works no matter which agent or platform the team has already standardized on.</span></div>
+        <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">A developer sees exactly what a change breaks before ever opening a PR, without adopting a new IDE plugin or switching platforms — and that same finding shows up later as part of one coherent risk score, not a separate signal they have to reconcile with everything else Ordino tells them.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="problem-block">
+    <span class="tag validated-strong">Validated — industry research</span>
+    <h2 class="hmw" style="border:none; padding:0;">How might we help teams know what's worth testing when there's too much code to test everything?</h2>
+    <p class="problem-context">AI now generates more code than teams can fully test, so many are skipping tests under pressure instead of choosing wisely what matters most.</p>
+    <div class="hypothesis">
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">engineering teams shipping AI-generated code faster than they can review it</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">confidence about what to test, without needing to test everything</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">a recommendation of which existing tests matter most for a given change, and a flag — plus a first draft — wherever no test exists at all for something affected</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">research shows 60% of organizations already ship untested code, citing sheer volume as a leading reason — the problem is knowing what to prioritize, not writing more tests blindly</span></div>
+    </div>
+    <div class="existing">
+      <h4>Existing solutions</h4>
+      <ul>
+        <li><strong>Predictive test selection is a mature, established category</strong>: Develocity/Gradle, CloudBees Smart Tests (formerly Launchable), Appsurify TestBrain, Sealights, Orangebeard Auto Test Pilot — all rank or select which existing tests to run for a given change.</li>
+        <li><strong>Qodo Cover</strong> — analyzes existing coverage and generates new tests specifically to fill gaps, using mutation testing to check the generated tests are meaningful. Also <strong>Qase</strong>, which generates test cases from requirements and tracks coverage in one dashboard.</li>
+      </ul>
+      <p class="verdict">The gap-filling edge we thought was open is narrower than stated — Qodo Cover already does this for single-repo coverage gaps. What's left open is tying gap-filling specifically to cross-repo blast radius, not gap-filling generally.</p>
+      <div class="win-detail">
+        <h5>How Ordino could win</h5>
+        <div class="win-line"><span class="win-label">Target</span><span class="win-value">Recommend which existing tests matter for a change and generate missing ones based specifically on cross-repo impact — reusing the blast-radius graph from hypothesis 1 rather than building a separate coverage engine.</span></div>
+        <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">Qodo Cover and the established predictive-test-selection tools (Develocity, CloudBees Smart Tests, Sealights, Appsurify) all operate within the boundary of one repository or one pipeline. None of them reach across repository boundaries to decide what's worth testing.</span></div>
+        <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">Teams get gap-filling that reflects the real risk of a change — what it affects elsewhere in the system — instead of gap-filling that only looks at what's uncovered locally, closing a blind spot every current market leader shares.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="problem-block">
+    <span class="tag validated-strong">Validated — industry research</span>
+    <h2 class="hmw" style="border:none; padding:0;">How might we help teams trust that a change is safe, without relying on someone remembering to check carefully?</h2>
+    <p class="problem-context">AI-written code looks finished, but it's measurably less reliable than before — right at the moment teams have the least time to double-check it.</p>
+    <div class="hypothesis">
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">teams reviewing AI-generated pull requests</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">a consistent, trustworthy signal for whether a change is safe to merge</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">a risk score built from real, checkable facts — test coverage, what depends on the change, how much code changed — rather than a model's own opinion of its work</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">research shows AI-assisted code carries 1.7–2.7x more defects than human-written code, so manual scrutiny alone is no longer a reliable safety net</span></div>
+    </div>
+    <div class="existing">
+      <h4>Existing solutions</h4>
+      <ul>
+        <li><strong>CodeRabbit, Greptile, Qodo</strong> — purpose-built AI PR reviewers, already well-adopted (market estimated to grow from ~$2B in 2023 to ~$5B by 2028). Greptile: 82% bug catch rate. Qodo's 2026 release uses a multi-agent architecture with a dedicated test-coverage-gap agent.</li>
+        <li><strong>Atlassian Rovo Dev</strong> — reviews PRs for quality/security/performance and checks them against Jira acceptance criteria natively, inside the platform that owns the requirements data. Cut PR cycle time 45% for one reported organization. <strong>GitHub Copilot</strong> code review is now GA with agentic, project-context-aware review.</li>
+      </ul>
+      <p class="verdict">The most crowded of the nine, and now includes two platform incumbents (Atlassian, GitHub), not just startups. The one open angle: these tools give an LLM's opinion of the code; none are built specifically around a deterministic score (real coverage/dependency/churn data, not a model's self-assessment).</p>
+      <div class="win-detail">
+        <h5>How Ordino could win</h5>
+        <div class="win-line"><span class="win-label">Target</span><span class="win-value">Build the score entirely from deterministic, checkable facts — real test coverage, dependency depth, code churn — and expose it as an embeddable, exportable signal that other review tools can call, rather than a new interface for humans to check instead of the ones they already use.</span></div>
+        <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">CodeRabbit, Greptile, Qodo, Atlassian Rovo, and GitHub Copilot all produce an LLM's opinion of the code — not fully reproducible or auditable. A deterministic score is something a compliance officer or engineering lead can actually verify, unlike "the model thinks this is fine."</span></div>
+        <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">Teams get a trustworthy, reproducible signal they can defend in an audit or a postmortem, and they can plug it into the review tools they already use instead of ripping anything out — lower switching cost, higher trust than any opinion-based reviewer alone.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="problem-block">
+    <span class="tag unverified">Inferred — not yet directly confirmed with a customer</span>
+    <h2 class="hmw" style="border:none; padding:0;">How might we make quality risk visible over time, not just at the moment of one change?</h2>
+    <p class="problem-context">Unverified AI-generated code is quietly piling up as technical debt, and nobody has a standing view of where it's accumulating fastest.</p>
+    <div class="hypothesis">
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">whoever is accountable for quality across a team's repositories</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">earlier awareness of where risk is building up, before it becomes a crisis</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">a simple, always-current view of risk and test coverage trends across repos, rather than a one-time snapshot</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">technical debt from AI-generated code is documented to be growing quickly — though this specific need hasn't yet been confirmed directly with a customer, and should be tested before treating it as core</span></div>
+    </div>
+    <div class="existing">
+      <h4>Existing solutions</h4>
+      <ul>
+        <li><strong>CodeScene</strong> — CodeHealth™ metric, hotspot analysis, trend monitoring over time. <strong>SonarQube</strong> — quality gates, portfolio-level health views. <strong>Cortex</strong> — aggregates tools like SonarQube into org-wide scorecards.</li>
+      </ul>
+      <p class="verdict">A long-established, mature category. Not differentiated territory on its own — would need to be tied specifically to the cross-repo risk graph to stand apart.</p>
+      <div class="win-detail">
+        <h5>How Ordino could win</h5>
+        <div class="win-line"><span class="win-label">Target</span><span class="win-value">Surface only the cross-repo blast-radius and risk graph as a live, always-current view — not a general code-health metric competing with tools that already do that well.</span></div>
+        <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">CodeScene, SonarQube, and Cortex all show quality metrics computed independently of any cross-repo dependency graph. None of them show an organization's own blast-radius trend over time, because none of them build that graph in the first place.</span></div>
+        <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">A quality lead gets a direct, specific answer to "where is risk accumulating because of how our repos depend on each other" — a question the three established dashboard tools can't answer, instead of one more general health score to reconcile against the others.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="problem-block">
+    <span class="tag validated-strong">Validated — industry research</span>
+    <h2 class="hmw" style="border:none; padding:0;">How might we reduce how much low-value review work lands on our most experienced engineers?</h2>
+    <p class="problem-context">Senior engineers are absorbing a growing, disproportionate share of the burden of checking AI-written code — a scarce resource being spent on work that doesn't need their level of judgment.</p>
+    <div class="hypothesis">
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">senior engineers, who review AI code more carefully and more often than anyone else on the team</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">more time for meaningful work and less reviewer fatigue</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">automatic triage that fast-tracks low-risk changes and routes only genuinely high-risk ones to a person</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">data shows senior engineers already spend more time reviewing and accept less AI-written code than juniors do — the burden is concentrating on a scarce group in a way that doesn't scale</span></div>
+    </div>
+    <div class="existing">
+      <h4>Existing solutions</h4>
+      <ul>
+        <li><strong>CodeAnt.ai</strong> — risk scoring that automatically triages every PR into priority tiers. <strong>Greptile</strong> — already positioned as freeing senior engineers for architecture/product judgment instead of routine bug-catching.</li>
+        <li>The "automated baseline + AI triage + focused human review" layered model is described in industry write-ups as already standard practice, not a novel idea.</li>
+      </ul>
+      <p class="verdict">Already productized. Differentiation would have to come from tying triage to the cross-repo risk graph, not from triage itself.</p>
+      <div class="win-detail">
+        <h5>How Ordino could win</h5>
+        <div class="win-line"><span class="win-label">Target</span><span class="win-value">Expose the deterministic risk score as an API or webhook that plugs into a team's existing triage workflow, instead of building a competing triage interface.</span></div>
+        <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">CodeAnt.ai and Greptile already own the triage UX and the workflows teams have built around them. Competing head-on means asking a customer to rip out a working tool for one with the same core idea — a hard sell with no real advantage.</span></div>
+        <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">Teams keep the triage tool they already trust and get a more deterministic, auditable risk signal feeding it — an upgrade to what they have, not a rip-and-replace decision they have to justify.</span></div>
+      </div>
+    </div>
+  </div>
+
+    <div class="parked" style="margin-top:36px;">
+      <span class="tag" style="background:#eee; color:var(--muted);">Parked — deprioritized</span>
+      <h4 style="font-size:15px; color:var(--ink); margin:6px 0 10px;">How might we help teams start development with clear, well-tested requirements?</h4>
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">teams defining requirements before development starts</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">fewer downstream defects caused by ambiguous or incomplete specs</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">automatic requirement-quality scoring and draft test cases generated from each requirement</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">ambiguous requirements are a documented source of rework, and AI can already catch this before design starts</span></div>
+      <div class="existing">
+        <h4>Existing solutions</h4>
+        <p style="font-size:13px; color:#2b2b2b; margin:0 0 8px;">Jama Connect, IBM DOORS Next, Codebeamer, Polarion, Visure Requirements, TestCollab, TestRail, aqua cloud, <strong>Qase</strong> (test cases from requirements, coverage dashboards, root cause analysis, and flakiness tracking, all in one product), <strong>QA Wolf</strong> (fully managed test planning, authoring, and maintenance as a human+AI service), <strong>Mabl</strong> (paste a Jira ticket and it authors the test), and <strong>Atlassian Rovo</strong> (generates test cases from requirements natively inside Jira) — mature, several deeply embedded in regulated-industry compliance workflows (DO-178C, ISO 26262, ISO 14971), and two now built directly into the requirements tool itself.</p>
+        <p class="verdict">Deprioritized: established incumbents, plus the platform (Atlassian) now doing this natively inside the requirements tool.</p>
+        <div class="win-detail">
+          <h5>How Ordino could win, if revisited</h5>
+          <div class="win-line"><span class="win-label">Target</span><span class="win-value">Skip authoring test cases from requirements — that's the crowded, platform-owned part. Instead, score after the fact whether a requirement actually ended up covered by real, executed tests, using the same coverage data Ordino already produces elsewhere.</span></div>
+          <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">Jama Connect, IBM DOORS Next, Qase, QA Wolf, Mabl, and Atlassian Rovo all help write the requirement or the test case up front. None of them verify, after code ships, that the requirement was actually tested in practice.</span></div>
+          <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">Compliance and QA leads get proof instead of intention — a verified record that a requirement was genuinely tested, which matters far more in an audit than a well-written spec that was never checked against real coverage.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="parked" style="margin-top:16px;">
+      <span class="tag" style="background:#eee; color:var(--muted);">Parked — deprioritized</span>
+      <h4 style="font-size:15px; color:var(--ink); margin:6px 0 10px;">How might we help teams understand why a test failed, without hours of manual digging?</h4>
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">engineers investigating a failed test</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">faster resolution and far less time lost to manual log-digging</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">automatic analysis of logs, screenshots, and recent changes to explain why a test failed</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">AI-driven root cause analysis already claims 75–80% reductions in debugging time in production use</span></div>
+      <div class="existing">
+        <h4>Existing solutions</h4>
+        <p style="font-size:13px; color:#2b2b2b; margin:0 0 8px;">Ranger, TestDino, Perfecto, Galileo, <strong>Qase</strong> (root cause analysis built into its test-management dashboard), and <strong>Mabl</strong> (automatically classifies a failure as real regression, app change, or noise before a human looks at it) — mature tools already claiming large, proven time reductions.</p>
+        <p class="verdict">Deprioritized: multiple funded, already-effective point solutions exist.</p>
+        <div class="win-detail">
+          <h5>How Ordino could win, if revisited</h5>
+          <div class="win-line"><span class="win-label">Target</span><span class="win-value">Trace a test failure back through the cross-repo dependency graph to the change that actually caused it, rather than analyzing the failing test's own logs and screenshots in isolation.</span></div>
+          <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">Ranger, TestDino, Perfecto, Galileo, Qase, and Mabl all analyze failures within the boundary of one repo or one test. None of them maintain a cross-repo causal graph, so none can point to an originating change in a different repository.</span></div>
+          <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">An engineer gets pointed straight to "this change in this other repo caused it," instead of "here's what the failure looked like" — cutting investigation time further than log analysis alone can reach.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="parked" style="margin-top:16px;">
+      <span class="tag" style="background:#eee; color:var(--muted);">Parked — deprioritized</span>
+      <h4 style="font-size:15px; color:var(--ink); margin:6px 0 10px;">How might we stop unreliable tests from eroding trust in the test suite?</h4>
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">teams relying on automated test suites</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">more trust in test results and less time wasted investigating false failures</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">automatic detection, quarantine, and ownership routing for flaky tests</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">flaky tests are a well-documented drag on CI reliability and team trust in the suite</span></div>
+      <div class="existing">
+        <h4>Existing solutions</h4>
+        <p style="font-size:13px; color:#2b2b2b; margin:0 0 8px;">TestDino, BuildPulse, Atlassian's own Flakinator, Trunk Flaky Tests, Datadog CI Visibility, <strong>Mabl</strong> (auto-heals tests when the UI changes, reducing false "flaky" failures at the source), testRigor, <strong>Qase</strong> (flakiness tracking built into its dashboards), and <strong>TestMu AI</strong> (formerly LambdaTest — a large-scale, full-stack "agentic AI quality engineering cloud," 3M+ users, recognized in Forrester's Autonomous Testing Platforms Wave) — five-plus distinct sub-categories of tooling already exist for this alone.</p>
+        <p class="verdict">Deprioritized: dense, mature competitive space, including at least one very large, well-resourced platform player.</p>
+        <div class="win-detail">
+          <h5>How Ordino could win, if revisited</h5>
+          <div class="win-line"><span class="win-label">Target</span><span class="win-value">Use the cross-repo risk graph to distinguish tests that are flaky because of a genuinely fragile cross-repo dependency from tests that are flaky because of environment or infrastructure noise.</span></div>
+          <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">TestDino, BuildPulse, Atlassian's Flakinator, Trunk, Mabl, Qase, and TestMu AI all detect and quarantine flaky tests, but treat every flaky test the same regardless of cause — none can tell architectural fragility from noise, because none maintain the dependency graph.</span></div>
+          <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">Teams stop wasting effort quarantining or patching tests that are actually surfacing a real architectural risk, and get a shorter, more trustworthy quarantine list — with the genuinely risky flakiness flagged instead of buried alongside noise.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="parked" style="margin-top:16px;">
+      <span class="tag" style="background:#eee; color:var(--muted);">Parked — later horizon</span>
+      <h4 style="font-size:15px; color:var(--ink); margin:6px 0 10px;">How might we know what to regression-test before a release, not just before a merge?</h4>
+      <div class="hyp-line"><span class="hyp-label">We believe that</span><span class="hyp-value">teams preparing a release</span></div>
+      <div class="hyp-line"><span class="hyp-label">Will experience</span><span class="hyp-value">confidence about what to regression-test without re-running the full suite</span></div>
+      <div class="hyp-line"><span class="hyp-label">If we provide</span><span class="hyp-value">risk-based test selection for release candidates, built on the same cross-repo graph as the pre-PR check</span></div>
+      <div class="hyp-line"><span class="hyp-label">Because</span><span class="hyp-value">it's the same underlying problem as pre-merge test prioritization, just at a later stage of the pipeline</span></div>
+      <div class="existing">
+        <h4>Existing solutions</h4>
+        <p style="font-size:13px; color:#2b2b2b; margin:0 0 8px;">Develocity, CloudBees Smart Tests (formerly Launchable), Appsurify TestBrain, Sealights — same established category found for problem 2.</p>
+        <p class="verdict">Deprioritized for now, not ruled out: a later horizon built on the same graph, once the core bet is proven.</p>
+        <div class="win-detail">
+          <h5>How Ordino could win, if revisited</h5>
+          <div class="win-line"><span class="win-label">Target</span><span class="win-value">Extend the same pre-PR blast-radius graph to release-candidate test selection, rather than building a separate selection engine from scratch.</span></div>
+          <div class="win-line"><span class="win-label">Why it beats the competition</span><span class="win-value">Develocity, CloudBees Smart Tests, Appsurify, and Sealights are mature but generic predictive-test-selection tools — none tie release-test selection to the same org-specific, cross-repo dependency graph a customer's pre-PR checks already use.</span></div>
+          <div class="win-line"><span class="win-label">Customer value</span><span class="win-value">One consistent risk model spans pre-merge and pre-release, so a team gets the same answer about what's risky at both stages, instead of two disconnected tools that might disagree with each other.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Prepared by Ganji — Ordino AI · Idea document, restructured around competitive reality
+  </footer>
+
+</div>
+</body>
+</html>
