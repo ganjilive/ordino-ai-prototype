@@ -1,7 +1,39 @@
+import type { Metadata } from "next";
 import { Bot, Code2, FileText, FlaskConical, Megaphone, Monitor, SquareTerminal } from "lucide-react";
 
 import { ProductSurfaceCard } from "@/components/home/product-surface-card";
-import { buttonVariants } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Ordino Research and Design Ideas",
+};
+
+const MAIN_OPTIONS = [
+  {
+    href: "/research-findings.html",
+    icon: FlaskConical,
+    title: "Research Findings",
+    description: "What the research points to — competitive landscape and validated customer problems.",
+    cta: "Read the research",
+    target: "_blank",
+    rel: "noopener noreferrer",
+  },
+  {
+    href: "/design-brief.html",
+    icon: FileText,
+    title: "Design Brief",
+    description: "What ideas we have for the product now — positioning, capabilities, and architecture.",
+    cta: "Read the design brief",
+    target: "_blank",
+    rel: "noopener noreferrer",
+  },
+  {
+    href: "/marketing",
+    icon: Megaphone,
+    title: "Marketing Page",
+    description: "How we intend to position the product in the market.",
+    cta: "View the marketing page",
+  },
+] as const;
 
 const PRODUCT_SURFACES = [
   {
@@ -36,46 +68,32 @@ const PRODUCT_SURFACES = [
 
 export default function Home() {
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-6 py-16">
-      <div className="mb-10 flex items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Ordino</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Four product-surface ideas for the same concept. Pick one to demo.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <a
-            href="/research-findings.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "default", size: "lg" })}
-          >
-            <FlaskConical className="h-4 w-4" />
-            Research Findings
-          </a>
-          <a
-            href="/design-brief.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "default", size: "lg" })}
-          >
-            <FileText className="h-4 w-4" />
-            Read the Design Brief
-          </a>
-          <a
-            href="/marketing"
-            className={buttonVariants({ variant: "outline", size: "lg" })}
-          >
-            <Megaphone className="h-4 w-4" />
-            View Marketing Page
-          </a>
-        </div>
+    <div className="mx-auto w-full max-w-6xl px-6 py-16">
+      <div className="text-center">
+        <h1 className="text-2xl font-semibold">Ordino Research and Design Ideas</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Start here: what the research found, what we&apos;re proposing for the product, and
+          how we&apos;d pitch it.
+        </p>
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {PRODUCT_SURFACES.map((surface) => (
-          <ProductSurfaceCard key={surface.href} {...surface} />
+
+      <div className="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
+        {MAIN_OPTIONS.map((option) => (
+          <ProductSurfaceCard key={option.href} {...option} size="lg" />
         ))}
+      </div>
+
+      <div className="mt-16 border-t border-border pt-10">
+        <h2 className="text-lg font-semibold">Prototypes</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Four design suggestions for how someone might interact with Ordino day to day. Pick
+          one to explore.
+        </p>
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {PRODUCT_SURFACES.map((surface) => (
+            <ProductSurfaceCard key={surface.href} {...surface} />
+          ))}
+        </div>
       </div>
     </div>
   );
