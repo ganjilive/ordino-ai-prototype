@@ -24,11 +24,15 @@ Content is drawn from `public/design-brief.html` and
 - The "before the PR exists" constraint as the hero problem, and the
   three-surface architecture (direct use, background watcher, called by
   other AI agents via MCP) as how it's delivered.
-- The 7 capabilities, with **Blast Radius Analysis** and **Test Authoring**
-  called out together as the flagship combination for this pitch
-  specifically (per user direction — this diverges slightly from the design
-  brief's own priority order, which ranks Test Automation #1 and Blast
-  Radius #7 for adoption-ease reasons unrelated to marketing narrative).
+- All 7 capabilities, shown with equal visual weight so a customer reads
+  Ordino as covering a full team's worth of QA work (test planning,
+  authoring, automation, root cause analysis, auto healing, requirement
+  analysis, blast radius analysis) — not a narrow point tool. Within that
+  set, **Blast Radius Analysis** and **Test Authoring** are flagged as the
+  core pair via a small badge, not split into a separate dominant callout —
+  per user direction, the page needs to convey breadth ("Ordino can do a
+  lot of my team's usual QA work") first, with the flagship duo as a nod
+  inside that breadth rather than the headline act.
 
 A note on framing, settled during brainstorming: the "Why" section must stay
 centered on the **quality owner's** blind spot (signing off on a merge/release
@@ -62,9 +66,10 @@ one for that path in the first place.
   `/terminal`) — the one interface sketch used here (the Slack risk
   notification) is static, matching the "skimmable pitch page" goal agreed
   during brainstorming.
-- No attempt to cover all 7 capabilities with equal weight — Blast Radius
-  Analysis + Test Authoring are the flagship pair; the rest render as a
-  lighter supporting grid.
+- No separate, visually dominant "hero capability" callout box for Blast
+  Radius Analysis + Test Authoring — they stay inside the main 7-capability
+  grid, marked with a small "Core" badge, so the section reads as full
+  breadth first.
 
 ## Routing
 
@@ -162,16 +167,22 @@ convention.
     agent invokes Ordino mid-task.
 - `<RiskNotificationMockup />` directly under the three cards, captioned
   "The background watcher in action — nobody asked, Ordino noticed."
-- Core-loop callout (visually the most emphasized element in this section —
-  gradient-bordered card): "**Blast radius analysis + test authoring**.
-  Ordino figures out exactly what a change puts at risk across every repo
-  it touches, then writes the tests to cover it — before anyone has to
-  ask."
-- Supporting capability grid — 5 remaining capabilities
-  (`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3`), smaller/muted
-  cards: Test Automation, Root Cause Analysis, Test Planning, Auto Healing,
-  Requirement Analysis. (Blast Radius Analysis and Test Authoring appear
-  only in the core-loop callout above, not duplicated in this grid.)
+- Transition line ahead of the capability grid, setting up "this is a lot of
+  your team's QA work, not one point feature": "Ordino covers the QA work
+  your team already does today — planning, authoring, automation, root
+  cause analysis, and more — so quality keeps pace with how fast agents can
+  now write code. Two capabilities carry the rest: blast radius analysis
+  tells Ordino what's at risk, and test authoring writes the tests to cover
+  it."
+- Full 7-capability grid (`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4
+  gap-3`), all cards equal size/weight (`border-border bg-card`, not muted):
+  Test Automation, Root Cause Analysis, Test Authoring, Test Planning, Auto
+  Healing, Requirement Analysis, Blast Radius Analysis. Descriptions taken
+  verbatim from the design brief's capability list. The two flagship cards
+  (Test Authoring, Blast Radius Analysis) get a small "Core" label
+  (`ordino-gradient-text`, top-right of the card) and a `border-primary`
+  border instead of `border-border` — a flag within the grid, not a
+  separate box pulled out of it.
 
 ### 5. Closing CTA
 
