@@ -197,6 +197,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { RiskNotificationMockup } from "@/components/marketing/risk-notification-mockup";
 import { WaitlistForm } from "@/components/marketing/waitlist-form";
+import { cn } from "@/lib/utils";
 
 const STATS = [
   {
@@ -232,12 +233,43 @@ const SURFACES = [
   },
 ] as const;
 
-const SUPPORTING_CAPABILITIES = [
-  "Test Automation",
-  "Root Cause Analysis",
-  "Test Planning",
-  "Auto Healing",
-  "Requirement Analysis",
+const CAPABILITIES = [
+  {
+    title: "Test Automation",
+    description: "Automate system tests in test environments — front-end, API, and integration.",
+    core: false,
+  },
+  {
+    title: "Root Cause Analysis",
+    description: "Analyse failures, find the root cause, and recommend fixes.",
+    core: false,
+  },
+  {
+    title: "Test Authoring",
+    description: "Write test cases so a requirement is properly tested before releasing.",
+    core: true,
+  },
+  {
+    title: "Test Planning",
+    description:
+      "Plan tests before a feature is built — how much developer testing, how much automated system testing.",
+    core: false,
+  },
+  {
+    title: "Auto Healing",
+    description: "Heal flaky tests automatically so test suites don't rot.",
+    core: false,
+  },
+  {
+    title: "Requirement Analysis",
+    description: "Refine requirements to make them testable and complete before development starts.",
+    core: false,
+  },
+  {
+    title: "Blast Radius Analysis",
+    description: "Assess what tests to run depending on the changes done to the code.",
+    core: true,
+  },
 ] as const;
 
 export default function MarketingPage() {
@@ -362,25 +394,31 @@ export default function MarketingPage() {
           </p>
         </div>
 
-        <div className="ordino-gradient-ring mt-10 max-w-2xl rounded-lg p-[1.5px]">
-          <div className="rounded-[7px] bg-card p-6">
-            <span className="ordino-gradient-text text-xs font-semibold tracking-wide uppercase">
-              Blast radius analysis + test authoring
-            </span>
-            <p className="mt-2 text-base text-foreground">
-              Ordino figures out exactly what a change puts at risk across every repo it
-              touches, then writes the tests to cover it — before anyone has to ask.
-            </p>
-          </div>
-        </div>
+        <p className="mt-10 max-w-2xl text-base text-muted-foreground">
+          Ordino covers the QA work your team already does today — planning, authoring,
+          automation, root cause analysis, and more — so quality keeps pace with how fast
+          agents can now write code. Two capabilities carry the rest: blast radius analysis
+          tells Ordino what&apos;s at risk, and test authoring writes the tests to cover it.
+        </p>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {SUPPORTING_CAPABILITIES.map((capability) => (
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {CAPABILITIES.map((capability) => (
             <div
-              key={capability}
-              className="rounded-lg border border-border bg-card/60 p-3 text-center text-sm font-medium text-muted-foreground"
+              key={capability.title}
+              className={cn(
+                "rounded-lg border bg-card p-4",
+                capability.core ? "border-primary" : "border-border",
+              )}
             >
-              {capability}
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold">{capability.title}</h3>
+                {capability.core && (
+                  <span className="ordino-gradient-text shrink-0 text-[10px] font-semibold tracking-wide uppercase">
+                    Core
+                  </span>
+                )}
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">{capability.description}</p>
             </div>
           ))}
         </div>
@@ -421,7 +459,7 @@ Expected: no errors.
 
 With the dev server running (`npm run dev`), visit `http://localhost:3000/marketing` directly:
 - Confirm all five sections render in order: Hero, What, Why, How, Closing CTA.
-- Confirm the stat strip shows 3 cards, the risk notification mockup renders with a "High risk" badge, and the gradient-bordered "Blast radius analysis + test authoring" callout is visually distinct from the plain capability grid below it.
+- Confirm the stat strip shows 3 cards, the risk notification mockup renders with a "High risk" badge, and all 7 capability cards render with equal size/weight — with only "Test Authoring" and "Blast Radius Analysis" showing the small gradient "Core" label and a `border-primary` border, the other 5 using the plain `border-border` style.
 - Type an email into the hero waitlist form and submit — confirm it swaps to "You're on the list — we'll be in touch." without a page reload.
 - Scroll to the closing CTA form and submit it independently — confirm it also swaps to the confirmation state (and that submitting one form did not already flip the other).
 - Confirm "← Back to Ordino" returns to `/`.
@@ -556,8 +594,21 @@ await step("risk notification mockup and high-risk badge render", async () => {
   await page.locator("text=High risk").waitFor({ timeout: 1000 });
 });
 
-await step("core-loop callout renders", async () => {
-  await page.locator("text=Blast radius analysis + test authoring").waitFor({ timeout: 1000 });
+await step("all 7 capability cards render, with 2 marked Core", async () => {
+  const titles = [
+    "Test Automation",
+    "Root Cause Analysis",
+    "Test Authoring",
+    "Test Planning",
+    "Auto Healing",
+    "Requirement Analysis",
+    "Blast Radius Analysis",
+  ];
+  for (const title of titles) {
+    await page.locator(`text=${title}`).first().waitFor({ timeout: 1000 });
+  }
+  const coreLabels = await page.locator("text=Core").count();
+  if (coreLabels !== 2) throw new Error(`expected 2 "Core" labels, found ${coreLabels}`);
 });
 
 await step("hero waitlist form submits to confirmation state", async () => {
