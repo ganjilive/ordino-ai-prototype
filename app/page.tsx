@@ -49,7 +49,7 @@ export default function Home() {
             href="/research-findings.html"
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonVariants({ variant: "outline", size: "lg" })}
+            className={buttonVariants({ variant: "default", size: "lg" })}
           >
             <FlaskConical className="h-4 w-4" />
             Research Findings
