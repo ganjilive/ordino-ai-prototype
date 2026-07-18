@@ -162,13 +162,19 @@
   <header class="hero">
     <div class="kicker">Internal positioning brief</div>
     <h1>Ordino — QA agents for agentic engineering</h1>
-    <p class="tagline">Coding agents ship code faster than QA can keep up. Ordino connects to a team's repos, requirements, and communication tools, giving agentic engineering teams the QA judgment and action neither a single agent nor a human alone has on its own.</p>
+    <p class="tagline">Coding agents ship code faster than QA can keep up. Ordino gives the person responsible for product quality — a QA engineer, tech lead, or release manager — agentic tools for the work they already do: test planning, authoring, automation, root cause analysis, and flaky test management.</p>
   </header>
+
+  <section style="margin-top:36px;">
+    <span class="pill">Who Ordino is for</span>
+    <h3 style="font-size:17px;">The quality owner, not the developer</h3>
+    <p>Ordino is built for whoever is accountable for product quality — a QA engineer, a tech lead, or a release manager. We call this person the <strong>quality owner</strong> throughout this document. Ordino makes the tasks that person already does today faster and more reliable; it isn't a tool that replaces them, and it isn't primarily a developer tool.</p>
+  </section>
 
   <section>
     <h2>The problem</h2>
-    <p>Modern products are built from many services and repos combining into one end product. When a developer changes one piece, nothing today tells them what else it breaks — until CI fails somewhere else, hours or days later.</p>
-    <p>This isn't hypothetical. In interviews with three developers, all confirmed they'd experienced this pain firsthand — including one at a large company where many modules combine into a single product. All three said the same thing: they want to know what's affected <strong>before opening a pull request</strong>, not after.</p>
+    <p>Modern products are built from many services and repos combining into one end product. When a developer changes one piece, nothing today tells the quality owner what else it breaks — until CI fails somewhere else, hours or days later, often after they've already signed off on the change.</p>
+    <p>This isn't hypothetical. In interviews with three developers, all confirmed they'd experienced this pain firsthand — including one at a large company where many modules combine into a single product. All three said the same thing: they want to know what's affected <strong>before opening a pull request</strong>, not after — the same visibility a quality owner needs before approving a merge or a release.</p>
     <div class="quote">
       "I want to know, at commit time, in my own terminal, which other repos are affected and whether existing tests actually cover that change — before I open the PR."
       <cite>— synthesized from developer interviews</cite>
@@ -178,123 +184,31 @@
 
   <section>
     <h2>Architecture at a glance</h2>
-    <svg viewBox="0 -35 1000 785" style="width:100%; height:auto;" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" style="fill:var(--muted)"></path>
-        </marker>
-        <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" style="fill:var(--accent)"></path>
-        </marker>
-      </defs>
-
-      <!-- connectors (drawn first, under boxes) -->
-      <line x1="180" y1="47" x2="226" y2="47" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)"></line>
-      <text x="178" y="38" font-size="10" style="fill:var(--muted)">works directly</text>
-
-      <line x1="105" y1="74" x2="105" y2="126" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)"></line>
-      <text x="112" y="103" font-size="10" style="fill:var(--muted)">works directly</text>
-
-      <line x1="400" y1="47" x2="421" y2="47" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)"></line>
-      <line x1="500" y1="66" x2="500" y2="186" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
-      <text x="507" y="128" font-size="10" style="fill:var(--muted)">invokes via MCP</text>
-
-      <line x1="180" y1="168" x2="386" y2="216" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)"></line>
-      <text x="215" y="188" font-size="10" style="fill:var(--muted)">config &amp; one-off commands</text>
-
-      <line x1="266" y1="362" x2="392" y2="288" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)"></line>
-      <text x="278" y="338" font-size="10" style="fill:var(--muted)">cross-repo knowledge</text>
-
-      <line x1="616" y1="240" x2="716" y2="240" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
-      <text x="608" y="217" font-size="10" style="fill:var(--muted)">requirements, coverage,</text>
-      <text x="608" y="229" font-size="10" style="fill:var(--muted)">notifications</text>
-
-      <line x1="500" y1="294" x2="500" y2="556" style="stroke:var(--muted); stroke-width:1.5" marker-end="url(#arrow)"></line>
-      <text x="508" y="425" font-size="10" style="fill:var(--muted)">performs</text>
-
-      <!-- Developer -->
-      <rect x="30" y="20" width="150" height="54" rx="10" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="105" y="52" font-size="13" font-weight="600" text-anchor="middle" style="fill:var(--ink)">Developer</text>
-
-      <!-- Coding agent -->
-      <rect x="230" y="20" width="170" height="54" rx="10" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="315" y="42" font-size="13" font-weight="600" text-anchor="middle" style="fill:var(--ink)">Coding agent</text>
-      <text x="315" y="59" font-size="10" text-anchor="middle" style="fill:var(--muted)">Claude Code, Cursor, etc.</text>
-
-      <!-- MCP pill -->
-      <rect x="425" y="28" width="150" height="38" rx="19" style="fill:var(--bg); stroke:var(--line)"></rect>
-      <text x="500" y="52" font-size="11" font-weight="600" text-anchor="middle" style="fill:var(--muted)">Ordino MCP Server</text>
-
-      <!-- Ordino CLI -->
-      <rect x="30" y="130" width="150" height="54" rx="10" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="105" y="152" font-size="13" font-weight="600" text-anchor="middle" style="fill:var(--ink)">Ordino CLI</text>
-      <text x="105" y="169" font-size="10" text-anchor="middle" style="fill:var(--muted)">config &amp; one-off commands</text>
-
-      <!-- Ordino core -->
-      <rect x="390" y="190" width="220" height="100" rx="14" style="fill:var(--accent-bg); stroke:var(--accent); stroke-width:1.5"></rect>
-      <text x="500" y="232" font-size="17" font-weight="600" text-anchor="middle" style="fill:var(--accent)">Ordino</text>
-      <text x="500" y="253" font-size="12" text-anchor="middle" style="fill:var(--accent)">QA agents (core)</text>
-      <text x="500" y="271" font-size="10" text-anchor="middle" style="fill:var(--accent)">agent-agnostic · always-on</text>
-
-      <!-- Git repositories cluster -->
-      <rect x="30" y="320" width="240" height="170" rx="12" style="fill:var(--bg); stroke:var(--line)"></rect>
-      <text x="150" y="344" font-size="13" font-weight="600" text-anchor="middle" style="fill:var(--ink)">Git repositories</text>
-      <rect x="50" y="360" width="200" height="40" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="150" y="376" font-size="11" text-anchor="middle" style="fill:var(--ink)">Local repo</text>
-      <text x="150" y="390" font-size="10" text-anchor="middle" style="fill:var(--muted)">(developer's machine)</text>
-      <rect x="50" y="408" width="200" height="40" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="150" y="424" font-size="11" text-anchor="middle" style="fill:var(--ink)">Org repositories</text>
-      <text x="150" y="438" font-size="10" text-anchor="middle" style="fill:var(--muted)">(multiple, cross-repo)</text>
-
-      <!-- Customer internal tools cluster -->
-      <rect x="720" y="90" width="260" height="310" rx="12" style="fill:var(--bg); stroke:var(--line)"></rect>
-      <text x="850" y="114" font-size="13" font-weight="600" text-anchor="middle" style="fill:var(--ink)">Customer's internal tools</text>
-      <rect x="740" y="134" width="220" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="850" y="150" font-size="11" text-anchor="middle" style="fill:var(--ink)">Requirements</text>
-      <text x="850" y="164" font-size="10" text-anchor="middle" style="fill:var(--muted)">Jira, Notion, Confluence</text>
-      <rect x="740" y="184" width="220" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="850" y="200" font-size="11" text-anchor="middle" style="fill:var(--ink)">Work management</text>
-      <text x="850" y="214" font-size="10" text-anchor="middle" style="fill:var(--muted)">Jira, Linear</text>
-      <rect x="740" y="234" width="220" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="850" y="250" font-size="11" text-anchor="middle" style="fill:var(--ink)">Communication</text>
-      <text x="850" y="264" font-size="10" text-anchor="middle" style="fill:var(--muted)">Slack</text>
-      <rect x="740" y="284" width="220" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="850" y="300" font-size="11" text-anchor="middle" style="fill:var(--ink)">Organisation</text>
-      <text x="850" y="314" font-size="10" text-anchor="middle" style="fill:var(--muted)">Microsoft 365</text>
-
-      <!-- Capabilities cluster -->
-      <rect x="235" y="560" width="530" height="150" rx="12" style="fill:var(--bg); stroke:var(--line)"></rect>
-      <text x="500" y="584" font-size="13" font-weight="600" text-anchor="middle" style="fill:var(--ink)">Ordino performs</text>
-      <rect x="255" y="604" width="150" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="330" y="629" font-size="11" text-anchor="middle" style="fill:var(--ink)">Test automation</text>
-      <rect x="425" y="604" width="150" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="500" y="629" font-size="11" text-anchor="middle" style="fill:var(--ink)">Risk flagging</text>
-      <rect x="595" y="604" width="150" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="670" y="629" font-size="11" text-anchor="middle" style="fill:var(--ink)">PR reviews</text>
-      <rect x="270" y="656" width="220" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="380" y="674" font-size="11" text-anchor="middle" style="fill:var(--ink)">Requirement → test</text>
-      <text x="380" y="688" font-size="10" text-anchor="middle" style="fill:var(--muted)">traceability</text>
-      <rect x="510" y="656" width="220" height="42" rx="6" style="fill:var(--card); stroke:var(--line)"></rect>
-      <text x="620" y="674" font-size="11" text-anchor="middle" style="fill:var(--ink)">Coverage info and</text>
-      <text x="620" y="688" font-size="10" text-anchor="middle" style="fill:var(--muted)">quality suggestions</text>
-
-      <!-- Proactive background loop: drawn last so it renders on top, routed above the top row so it never crosses through a box -->
-      <path d="M430,190 C430,-10 150,-20 105,20" fill="none" style="stroke:var(--accent); stroke-width:2; stroke-dasharray:6,4" marker-end="url(#arrowAccent)"></path>
-      <rect x="200" y="-33" width="230" height="30" rx="6" style="fill:var(--bg)"></rect>
-      <text x="205" y="-22" font-size="10" font-style="italic" style="fill:var(--accent)">background: proactive risk prompts</text>
-      <text x="205" y="-10" font-size="10" font-style="italic" style="fill:var(--accent)">and suggestions</text>
-    </svg>
-    <p class="muted" style="margin-top:10px;">Solid lines: on-demand or configured connections. Dashed line: Ordino's background watcher proactively notifying the developer, independent of the coding agent.</p>
+    <p>The quality owner works with Ordino directly — not through a coding agent as an intermediary. Ordino runs alongside them, always-on, and separately connects out to the tools and agents already in use at the org.</p>
+    <div class="arch">
+      <div class="box">
+        <h3>Quality owner</h3>
+        <p>QA engineer, tech lead, or release manager — works directly in Ordino's chat, terminal, or IDE panel.</p>
+      </div>
+      <div class="arrow">&#8646;</div>
+      <div class="box">
+        <h3>Ordino (core)</h3>
+        <p>Agent-agnostic, always-on. Performs the 7 core capabilities and connects out to the tools below.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:10px;">Ordino's background watcher also notifies the quality owner proactively, independent of this loop — see "How it works" below.</p>
   </section>
 
   <section>
     <h2>What Ordino connects to</h2>
-    <p>Ordino's context comes from three sources, plus the coding agent itself:</p>
+    <p>Ordino's context comes from six sources — the git repos and tools an org already runs, plus any AI agent that wants to call it:</p>
     <div class="inputs">
       <div class="box">Git repositories<span>Multiple repos — cross-repo dependency &amp; risk knowledge</span></div>
-      <div class="box">Requirement tools<span>Jira, Confluence — what should be tested</span></div>
+      <div class="box">Requirement management tools<span>Jira, Confluence — what should be tested</span></div>
+      <div class="box">Test management tools<span>Qase, TestRail, Xray — existing cases, coverage, execution history</span></div>
+      <div class="box">Knowledge bases<span>Confluence, Notion — product context and prior decisions</span></div>
       <div class="box">Communication tools<span>Slack etc. — who to notify, and how</span></div>
-      <div class="box">Coding agent<span>Claude Code, etc. — where developers already work</span></div>
+      <div class="box">Other AI agents<span>Claude Code, Cursor, specialized agents — invoke Ordino via MCP</span></div>
     </div>
   </section>
 
@@ -303,35 +217,41 @@
     <div class="grid3">
       <div class="card hero">
         <span class="pill">Hero capability</span>
-        <h3>Assess cross-repo risk</h3>
-        <p>Evaluate the risk of a local change before a PR exists, using cross-repo knowledge built from connected git repositories.</p>
+        <h3>Blast radius analysis</h3>
+        <p>Assess what tests to run depending on the changes done to the code — the capability no single coding agent or point tool offers, and the one directly validated by developer interviews.</p>
       </div>
       <div class="card">
-        <h3>Review pull requests</h3>
-        <p>Assess whether a PR is safe to merge, using cross-repo and requirement context.</p>
+        <span class="pill muted-pill">1 · shipped</span>
+        <h3>Test automation</h3>
+        <p>Automate system tests in test environments — front-end, API, and integration.</p>
       </div>
       <div class="card">
-        <h3>Answer coverage questions</h3>
-        <p>Answer questions about current test coverage on demand.</p>
+        <span class="pill muted-pill">2</span>
+        <h3>Root cause analysis</h3>
+        <p>Analyse failures, find the root cause, and recommend fixes.</p>
       </div>
       <div class="card">
-        <h3>Check requirement traceability</h3>
-        <p>Using connected requirement tools, flag requirements that don't yet have corresponding tests.</p>
+        <span class="pill muted-pill">3</span>
+        <h3>Test authoring</h3>
+        <p>Write test cases so a requirement is properly tested before releasing.</p>
       </div>
       <div class="card">
-        <h3>Write unit &amp; integration tests</h3>
-        <p>Generate unit and integration test code.</p>
+        <span class="pill muted-pill">4</span>
+        <h3>Test planning</h3>
+        <p>Plan tests before a feature is built — how much developer testing, how much automated system testing.</p>
       </div>
       <div class="card">
-        <h3>Write front-end test automation</h3>
-        <p>Generate and run front-end test automation — today's shipped capability.</p>
+        <span class="pill muted-pill">5</span>
+        <h3>Auto healing</h3>
+        <p>Heal flaky tests automatically so test suites don't rot.</p>
       </div>
       <div class="card">
-        <h3>Notify humans</h3>
-        <p>Communicate PRs, coverage reports, and failed tests to the right people via connected communication tools.</p>
+        <span class="pill muted-pill">6</span>
+        <h3>Requirement analysis</h3>
+        <p>Refine requirements to make them testable and complete before development starts.</p>
       </div>
     </div>
-    <p class="muted" style="margin-top:14px;">Cross-repo risk assessment is the headline: it's the capability no single coding agent or point tool can offer, and it's the one directly validated by developer interviews. The rest are what make the risk assessment usable and complete — data in (coverage, requirements), output out (generated tests, PR reviews, notifications).</p>
+    <p class="muted" style="margin-top:14px;">Numbered by fastest time-to-value and easiest adoption, not by importance — blast radius analysis is ranked last for adoption ease precisely because it needs the deepest integration, but it's what several of the other six lean on for their own differentiation. Full competitive research and rationale for every capability lives in the Research Findings document.</p>
   </section>
 
   <section>
@@ -339,33 +259,33 @@
     <div class="grid2">
       <div class="card">
         <span class="pill">What we are</span>
-        <h3>Agent-agnostic QA layer</h3>
-        <p>Ordino plugs into whatever coding agent a developer already uses — Claude Code today, others tomorrow — via MCP. It doesn't compete for the developer's attention; it makes their existing agent smarter.</p>
+        <h3>The quality owner's own QA tool</h3>
+        <p>Ordino is where the quality owner does their work directly — chat, terminal, or an IDE panel — and separately, agent-agnostic where it counts: any coding agent a team already uses (Claude Code today, others tomorrow) can call Ordino via MCP without Ordino trying to live inside that agent's own loop.</p>
       </div>
       <div class="card">
         <span class="pill">What we are not</span>
-        <h3>A competing place to do the work</h3>
-        <p>Ordino does have a CLI — but it's scoped to setup (<code>/integrate</code>, <code>/mcpservers</code>) and one-off/scriptable commands, not a conversational session developers sit in. Developers have already chosen their primary loop; asking them to move their actual work into a second interactive front-end creates exactly the kind of friction that kills developer tool adoption.</p>
+        <h3>A tool that asks developers to change their loop</h3>
+        <p>Ordino doesn't compete for the developer's attention or ask them to adopt a new interactive front-end — their coding agent stays exactly as it is, and calls Ordino via MCP when it needs to. It's the quality owner, not the developer, who has a standing reason to work inside Ordino directly.</p>
       </div>
     </div>
     <p class="callout" style="margin-top:20px;">
       <h3>Why this is defensible, not just a feature</h3>
-      <p style="margin-top:6px;">Coding agents can already be prompted to "write some tests." What they can't do is see across repos, connect to requirement and communication tools, or persist context between sessions — that's structurally outside a single agent's scope. Ordino's edge isn't a better prompt; it's standing awareness of the whole system, not one working directory.</p>
+      <p style="margin-top:6px;">Coding agents can already be prompted to "write some tests." What they can't do is see across repos, connect to requirement, test-management, and communication tools, or persist context between sessions — that's structurally outside a single agent's scope. Ordino's edge isn't a better prompt; it's standing awareness of the whole system, not one working directory.</p>
     </p>
   </section>
 
   <section>
     <h2>How it works: three surfaces, one loop</h2>
-    <p>The developer's primary interface stays their coding agent. Ordino operates through three surfaces around that, without ever requiring a switch:</p>
+    <p>The quality owner's primary interface is Ordino itself. Two more surfaces operate around that, without ever requiring the quality owner to switch tools or the developer to change their loop:</p>
     <div class="arch">
       <div class="box">
-        <h3>Coding agent</h3>
-        <p>Developer's existing loop — Claude Code, Cursor, etc.</p>
+        <h3>Quality owner (direct use)</h3>
+        <p>Chat, terminal, or IDE panel — setup, ongoing questions, and the 7 core capabilities, all in one place.</p>
       </div>
-      <div class="arrow">&#8646;</div>
+      <div class="arrow">&#8594;</div>
       <div class="box">
-        <h3>Ordino (on-demand)</h3>
-        <p>Called as an MCP tool for test generation, coverage Q&amp;A, requirement traceability, PR reviews, risk checks.</p>
+        <h3>Ordino (core)</h3>
+        <p>Test planning, authoring, automation, root cause analysis, auto healing, requirement and blast-radius analysis.</p>
       </div>
     </div>
     <div class="arch">
@@ -375,27 +295,27 @@
       </div>
       <div class="arrow">&#8594;</div>
       <div class="box">
-        <h3>Developer's existing channels</h3>
+        <h3>Team's existing channels</h3>
         <p>Slack, terminal notification, PR comment — no new interface to check.</p>
       </div>
     </div>
     <div class="arch">
       <div class="box">
-        <h3>Ordino CLI</h3>
-        <p>Setup (<code>/integrate</code>, <code>/mcpservers</code>) and one-off/scriptable commands — not a competing chat session.</p>
+        <h3>Other AI agents</h3>
+        <p>Claude Code, Cursor, or a specialized agent — calls Ordino as an MCP tool mid-task.</p>
       </div>
-      <div class="arrow">&#8594;</div>
+      <div class="arrow">&#8646;</div>
       <div class="box">
-        <h3>Config, automation, CI hooks</h3>
-        <p>Pre-commit/pre-push checks, standalone reports.</p>
+        <h3>Ordino (on-demand)</h3>
+        <p>Same 7 capabilities, invoked programmatically instead of by the quality owner directly.</p>
       </div>
     </div>
-    <p class="muted" style="margin-top:12px;">This resolves the core tension: the proactive, ambient QA value from the original vision doesn't require developers to adopt a new primary tool — it just requires Ordino to notify through channels they already trust.</p>
+    <p class="muted" style="margin-top:12px;">This resolves the core tension: the proactive, ambient QA value from the original vision doesn't require developers to adopt a new primary tool — it just requires Ordino to notify through channels they already trust, and to be callable by whatever agent a developer already uses.</p>
   </section>
 
   <section>
     <h2>Interface sketches</h2>
-    <p>Four concrete surfaces, sketched to make the idea tangible rather than abstract.</p>
+    <p>Five concrete surfaces, sketched to make the idea tangible rather than abstract.</p>
 
     <h3 class="mockup-h">1. Installing Ordino and connecting tools (CLI)</h3>
     <div class="terminal">
@@ -418,13 +338,19 @@
         <div class="line"><span class="prompt">$</span> <span class="cmd">ordino /mcpservers add jira</span></div>
         <div class="line ok">✓ Jira connected — acme.atlassian.net</div>
         <div class="line">&nbsp;</div>
+        <div class="line"><span class="prompt">$</span> <span class="cmd">ordino /mcpservers add qase</span></div>
+        <div class="line ok">✓ Test management connected — Qase (acme workspace)</div>
+        <div class="line">&nbsp;</div>
+        <div class="line"><span class="prompt">$</span> <span class="cmd">ordino /mcpservers add confluence</span></div>
+        <div class="line ok">✓ Knowledge base connected — acme.atlassian.net/wiki</div>
+        <div class="line">&nbsp;</div>
         <div class="line"><span class="prompt">$</span> <span class="cmd">ordino /mcpservers add slack</span></div>
         <div class="line ok">✓ Slack connected — #eng-quality</div>
         <div class="line">&nbsp;</div>
-        <div class="line out">Ordino is ready. Run `ordino` to start, or let your coding agent call it via MCP.</div>
+        <div class="line out">Ordino is ready. Run `ordino` to start, or let any connected AI agent call it via MCP.</div>
       </div>
     </div>
-    <p class="mockup-caption">One-time setup — once tools are connected, the developer doesn't need to come back here.</p>
+    <p class="mockup-caption">One-time setup — once tools are connected, the quality owner doesn't need to come back here.</p>
 
     <h3 class="mockup-h" style="margin-top:34px;">2. Asking Ordino to generate front-end test automation (CLI)</h3>
     <div class="terminal">
@@ -450,7 +376,7 @@
         <div class="line ordino-line ok">✓ Added to .github/workflows/e2e.yml</div>
       </div>
     </div>
-    <p class="mockup-caption">The wedge in action — a developer working directly with Ordino's CLI for a one-off task.</p>
+    <p class="mockup-caption">The wedge in action — the quality owner working directly with Ordino's CLI for a one-off task.</p>
 
     <h3 class="mockup-h" style="margin-top:34px;">3. Quality dashboard (web)</h3>
     <div class="dash">
@@ -495,7 +421,7 @@
         </div>
       </div>
     </div>
-    <p class="mockup-caption">Where a platform/DevEx lead would check in — the org-level view none of the individual surfaces provide.</p>
+    <p class="mockup-caption">Where a release manager or quality lead would check in — the org-level view none of the individual surfaces provide.</p>
 
     <h3 class="mockup-h" style="margin-top:34px;">4. Proactive risk notification (Slack)</h3>
     <div class="slack-msg">
@@ -515,6 +441,27 @@
       </div>
     </div>
     <p class="mockup-caption">The background watcher in action — nobody asked, Ordino noticed and reached out through a channel the team already uses.</p>
+
+    <h3 class="mockup-h" style="margin-top:34px;">5. Another AI agent calls Ordino</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot red"></span><span class="terminal-dot yellow"></span><span class="terminal-dot green"></span>
+        <span class="terminal-title">claude-code</span>
+      </div>
+      <div class="terminal-body">
+        <div class="line user-line">&gt; Add tests for the promo-code + tax path in calculateTotal</div>
+        <div class="line">&nbsp;</div>
+        <div class="line out">Reading src/lib/pricing.ts...</div>
+        <div class="line out">Writing unit and integration tests... done. 8 passed.</div>
+        <div class="line">&nbsp;</div>
+        <div class="line ordino-line"><span class="ordino-tag">Ordino(check-cross-repo-impact)</span>calling out mid-task...</div>
+        <div class="line ordino-line ok">✓ calculateTotal() is also called from ../booking-api/src/quote.ts (POST /checkout/quote) — no test covers the promo-code + tax path there.</div>
+        <div class="line">&nbsp;</div>
+        <div class="line out">Good catch — booking-api depends on this too. Writing the missing contract test there before finishing...</div>
+        <div class="line ok">✓ Added test to ../booking-api/test/quote.test.ts — 12 passed</div>
+      </div>
+    </div>
+    <p class="mockup-caption">Ordino as a peer, not a platform — any coding agent (or other specialized agent) can call it mid-task and act on what it finds, without the quality owner doing anything.</p>
   </section>
 
   <section>
@@ -546,26 +493,27 @@
     <table>
       <tr><th>Phase</th><th>What it is</th><th>Status</th></tr>
       <tr class="phase-row">
-        <td>1. Tool</td>
-        <td>Coding agent calls Ordino via MCP for front-end test automation. Zero adoption friction — no new developer habit required.</td>
+        <td>1. Direct use</td>
+        <td>Quality owner uses Ordino directly — chat, terminal, IDE panel — for today's tasks: test automation, root cause analysis, test authoring, test planning, auto healing, requirement analysis. Zero adoption friction for the developer, since their own loop doesn't change.</td>
         <td><span class="status-built">Built today</span></td>
       </tr>
       <tr class="phase-row">
-        <td>2. Risk-aware test automation agent</td>
-        <td>Evolve the front-end test automation tool into an agent that prioritizes what to test based on the risk of the local change — proving ground for the Ordino Agent architecture, scoped to one repo.</td>
+        <td>2. Agent integration matures</td>
+        <td>The same 7 capabilities become reliably callable by any AI agent — coding agents and specialized agents alike — via MCP, not just the quality owner's own sessions. Proving ground for the "Ordino Agent" architecture (see below).</td>
         <td><span class="status-roadmap">Roadmap — next up</span></td>
       </tr>
       <tr class="phase-row">
-        <td>3. Cross-repo risk (hero)</td>
-        <td>The same risk-based reasoning, extended across repos: pre-PR detection of what other repos/services are affected by a local change, and whether existing tests cover it. Also the point where coverage Q&amp;A, requirement traceability, and notifications extend into their own agents.</td>
+        <td>3. Blast radius as connective tissue (hero)</td>
+        <td>Cross-repo blast radius analysis matures into the graph the other 6 capabilities lean on for their own differentiation — pre-PR risk, root-cause tracing, and flaky-vs-fragile detection all reasoning from the same live, org-specific dependency graph.</td>
         <td><span class="status-roadmap">Vision — validated need, technical approach TBD with architects</span></td>
       </tr>
     </table>
+    <p class="muted" style="margin-top:10px;">Full priority ordering and rationale for all 7 capabilities lives in the Research Findings document.</p>
   </section>
 
   <section>
     <h2>Who this is for</h2>
-    <p>The pain is sharpest for engineering orgs where the product is split across many repos or services — typically mid-size to large teams, often ones running a microservices-style architecture, where no single developer can hold the whole dependency graph in their head. This is a team/platform-level need, not an individual-developer nice-to-have.</p>
+    <p>The pain is sharpest for engineering orgs where the product is split across many repos or services — typically mid-size to large teams, often ones running a microservices-style architecture, where no single developer can hold the whole dependency graph in their head. This is a team/platform-level need, not an individual-developer nice-to-have. Concretely, it's the QA engineer, tech lead, or release manager at these orgs — whoever is accountable for quality — that Ordino is built for.</p>
   </section>
 
   <section>
@@ -625,7 +573,7 @@
 
   <section>
     <h2>Riskiest assumption</h2>
-    <p>That developers/orgs will value <em>cross-repo, pre-PR</em> QA awareness enough to adopt Ordino as standing infrastructure — rather than treating today's wedge (agent-callable test automation) as the whole product. Three interviews is a strong signal, not proof at scale. A secondary risk: spreading effort across many capabilities before the hero capability is proven could dilute the thing that actually differentiates Ordino.</p>
+    <p>That developers/orgs will value <em>cross-repo, pre-PR</em> QA awareness enough to adopt Ordino as standing infrastructure — rather than treating today's wedge (agent-callable test automation) as the whole product. Three interviews is a strong signal, not proof at scale. A secondary risk: spreading effort across many capabilities before the hero capability is proven could dilute the thing that actually differentiates Ordino. A third, newer risk from the quality-owner pivot itself: that it's the quality owner, not the developer, who adopts Ordino as their own standing tool — unvalidated directly, and a different buyer/user motion than the original developer-first framing assumed.</p>
   </section>
 
   <footer>
