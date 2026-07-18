@@ -8,6 +8,12 @@ const suggestedPrompts = [
   "Review code quality for this repo",
   "Help me plan a new feature: saved payment methods",
   "Give me our quality metrics for the last 30 days",
+  "Why does booking-flow keep timing out?",
+  "How should we test the loyalty points feature?",
+  "Write test cases for the loyalty points requirement",
+  "Have any tests been auto-healed?",
+  "Is the loyalty points requirement (BOOK-510) ready for development?",
+  "What's the blast radius of a pricing change?",
 ];
 
 export function EmptyState({ onSelectPrompt }: { onSelectPrompt: (prompt: string) => void }) {

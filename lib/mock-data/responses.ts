@@ -8,6 +8,84 @@ export interface ScriptedResponse {
 
 export const scriptedResponses: ScriptedResponse[] = [
   {
+    id: "root-cause-analysis",
+    agentId: "qe-specialist",
+    triggers: ["root cause", "why did", "why does", "timing out", "time out"],
+    content: `I pulled the last 12 runs of booking-flow.e2e.spec.ts to check the "apply promo code" step specifically, since that's where recent failures cluster.
+
+4 of the last 12 runs timed out at that exact step. I cross-referenced booking-api's response times around each failure:
+
+- booking-api's /checkout/quote endpoint p95 latency rose from 180ms to 2.1s starting 3 days ago
+- The timing lines up exactly with the 4 timeouts
+
+This isn't a flaky test — it's a real regression in booking-api, most likely a caching layer that was removed or misconfigured on /checkout/quote. Extending the test's timeout would hide the regression instead of fixing it.
+
+Want me to open an issue against booking-api with this timing data attached?`,
+  },
+  {
+    id: "test-planning",
+    agentId: "qe-specialist",
+    triggers: ["test plan", "how should we test"],
+    content: `Before writing any test code, here's how I'd split coverage for the loyalty points redemption feature (BOOK-510):
+
+- Developer/unit tests (booking-website): points-balance validation, redemption math — fast, run on every commit
+- Integration tests: the call from booking-website to loyalty-service's ledger API, where points actually get deducted
+- System/e2e tests (staging): the full redemption flow end to end, including combining a promo code with points in the same order — the case most likely to get missed if we only test the happy path
+
+That last combination case is the one I'd flag as highest-risk — want me to hand this plan to QE Specialist for test-case authoring once you confirm the split?`,
+  },
+  {
+    id: "test-authoring",
+    agentId: "qe-specialist",
+    triggers: ["write test cases", "author test cases", "test cases for"],
+    content: `Drafting test cases for BOOK-510 from the acceptance criterion plus the gaps flagged during requirement analysis:
+
+1. Guest with 500 points redeems 200 at checkout — total reduces by $2.00 (1 point = $0.01)
+2. Guest tries to redeem more points than they have — redemption is capped, not rejected
+3. Guest combines a promo code and points in the same order — both discounts apply, in that order
+4. Guest requests a refund after redeeming points — points are restored to their balance
+
+Cases 2-4 come directly from the ambiguity I flagged in the original requirement, not from the acceptance criterion alone. Want me to open a comment on BOOK-510 with these, or generate the test files directly?`,
+  },
+  {
+    id: "auto-healing",
+    agentId: "qe-specialist",
+    triggers: ["auto-heal", "auto heal", "self-heal", "selector drift"],
+    content: `Scanned for selector drift across the active E2E suite.
+
+Found one: checkout-payment.e2e.spec.ts was asserting against a button labeled "Pay now" — that button was renamed to "Complete purchase" 2 days ago, and the test has been failing since.
+
+I healed it automatically — updated the selector from getByText('Pay now') to getByText('Complete purchase'). No human review needed for a label-only change like this; it's logged for audit.
+
+I'll still flag it for a human if the same selector needs healing more than twice in 30 days — that usually means the UI is genuinely unstable, not just renamed.`,
+  },
+  {
+    id: "requirement-analysis",
+    agentId: "qe-specialist",
+    triggers: ["book-510", "loyalty points requirement", "ready for development"],
+    content: `Pulled BOOK-510 from Jira: "As a guest, I can redeem loyalty points at checkout to reduce my total."
+
+That's the only acceptance criterion on the ticket. Before this is ready for development, I'd want three things clarified:
+
+1. What happens to redeemed points if the order is later refunded?
+2. Is there a maximum percentage of the order that can be paid with points?
+3. How does point redemption interact with a promo code applied to the same order?
+
+None of these are answered right now, and all three are the kind of gap that turns into rework mid-sprint rather than a quick clarification up front. Want me to draft the follow-up questions as a comment on BOOK-510?`,
+  },
+  {
+    id: "blast-radius",
+    agentId: "qe-specialist",
+    triggers: ["blast radius", "cross-repo risk", "what does this change affect"],
+    content: `Checked what calculateTotal() in src/lib/pricing.ts actually touches outside this repo before you rely on local test coverage alone.
+
+- calculateTotal() is called directly by booking-api's POST /checkout/quote endpoint
+- booking-api has no test covering the promo-code + tax interaction in that call path
+- Any change to the discount/tax logic in booking-website will silently affect quotes returned by booking-api, with nothing catching it until a customer notices a wrong total
+
+This is the same risk your local test suite can't see, no matter how good coverage looks here — it only shows up if something is watching across repos. Want me to open a tracking issue against booking-api for the missing test?`,
+  },
+  {
     id: "test-automation",
     agentId: "qe-specialist",
     triggers: ["automat"],
