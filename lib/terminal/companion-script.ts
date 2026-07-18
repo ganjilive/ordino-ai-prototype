@@ -94,7 +94,45 @@ export function answerQuestion(question: string): TerminalCompanionStep[] {
         id: "answer-author",
         kind: "answer",
         delayMs: 800,
-        text: "Draft cases: (1) guest with 500 points redeems 200 at checkout — total reduces by $2.00 at 1 point = $0.01; (2) guest tries to redeem more points than they have — redemption is capped, not rejected; (3) guest combines a promo code and points in one order — both discounts apply, in that order; (4) guest requests a refund after redeeming points — points are restored to their balance. Cases 2–4 come directly from the gaps I flagged in the requirement, not the acceptance criterion alone. Want me to open a comment on BOOK-510 with these?",
+        text: `Feature: Loyalty points redemption at checkout
+
+  Scenario: Guest redeems points below their balance
+    Given a guest has 500 loyalty points
+    When they redeem 200 points at checkout
+    Then the order total is reduced by $2.00 (1 point = $0.01)
+
+  Scenario: Guest attempts to redeem more points than they have
+    Given a guest has 500 loyalty points
+    When they attempt to redeem 800 points at checkout
+    Then the redemption is capped at 500 points, not rejected
+
+  Scenario: Guest combines a promo code with points in the same order
+    Given a guest has a valid promo code and a points balance
+    When they apply both at checkout
+    Then both discounts are applied, promo code first and points second
+
+  Scenario: Guest is refunded after redeeming points
+    Given a guest has redeemed points on a completed order
+    When that order is refunded
+    Then the redeemed points are restored to their balance`,
+      },
+      {
+        id: "tool-author-qase",
+        kind: "tool",
+        delayMs: 500,
+        text: "Ordino(write-test-cases --target=qase --requirement=BOOK-510)",
+      },
+      {
+        id: "tool-result-author-qase",
+        kind: "tool-result",
+        delayMs: 500,
+        text: 'Written to Qase — 4 scenarios added to suite "Loyalty Points Redemption" (BOOK-510)',
+      },
+      {
+        id: "answer-author-followup",
+        kind: "answer",
+        delayMs: 700,
+        text: "Scenarios 2–4 come directly from the gaps I flagged in the requirement, not the acceptance criterion alone. Want me to link the new Qase suite in a comment on BOOK-510?",
       },
     ];
   }

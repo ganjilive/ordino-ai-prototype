@@ -51,7 +51,7 @@ function StepLine({ step }: { step: TerminalCompanionStep }) {
         </div>
       );
     case "answer":
-      return <div className="pt-2 text-[#cccccc]">{step.text}</div>;
+      return <div className="whitespace-pre-wrap pt-2 text-[#cccccc]">{step.text}</div>;
     default:
       return null;
   }

@@ -38,14 +38,36 @@ That last combination case is the one I'd flag as highest-risk — want me to ha
     id: "test-authoring",
     agentId: "qe-specialist",
     triggers: ["write test cases", "author test cases", "test cases for"],
-    content: `Drafting test cases for BOOK-510 from the acceptance criterion plus the gaps flagged during requirement analysis:
+    content: `Drafting test cases for BOOK-510 from the acceptance criterion plus the gaps flagged during requirement analysis, in Gherkin:
 
-1. Guest with 500 points redeems 200 at checkout — total reduces by $2.00 (1 point = $0.01)
-2. Guest tries to redeem more points than they have — redemption is capped, not rejected
-3. Guest combines a promo code and points in the same order — both discounts apply, in that order
-4. Guest requests a refund after redeeming points — points are restored to their balance
+Feature: Loyalty points redemption at checkout
 
-Cases 2-4 come directly from the ambiguity I flagged in the original requirement, not from the acceptance criterion alone. Want me to open a comment on BOOK-510 with these, or generate the test files directly?`,
+  Scenario: Guest redeems points below their balance
+    Given a guest has 500 loyalty points
+    When they redeem 200 points at checkout
+    Then the order total is reduced by $2.00 (1 point = $0.01)
+
+  Scenario: Guest attempts to redeem more points than they have
+    Given a guest has 500 loyalty points
+    When they attempt to redeem 800 points at checkout
+    Then the redemption is capped at 500 points, not rejected
+
+  Scenario: Guest combines a promo code with points in the same order
+    Given a guest has a valid promo code and a points balance
+    When they apply both at checkout
+    Then both discounts are applied, promo code first and points second
+
+  Scenario: Guest is refunded after redeeming points
+    Given a guest has redeemed points on a completed order
+    When that order is refunded
+    Then the redeemed points are restored to their balance
+
+Scenarios 2-4 come directly from the ambiguity I flagged in the original requirement, not from the acceptance criterion alone.
+
+Ordino(write-test-cases --requirement=BOOK-510 --target=qase)
+✓ Written to Qase — 4 scenarios added to suite "Loyalty Points Redemption" (BOOK-510)
+
+Want me to link the new Qase suite in a comment on BOOK-510?`,
   },
   {
     id: "auto-healing",
