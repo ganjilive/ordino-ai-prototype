@@ -158,20 +158,6 @@ export default function MarketingPage() {
               first place.
             </p>
           </div>
-
-          <blockquote className="mt-8 max-w-2xl border-l-2 border-border pl-5 text-lg text-foreground italic">
-            &quot;Before I approve this, I want to know what it actually touches — and
-            whether it&apos;s covered.&quot;
-            <footer className="mt-2 text-sm font-normal text-muted-foreground not-italic">
-              The same blind spot developer interviews confirmed, now from the seat that has
-              to approve it.
-            </footer>
-          </blockquote>
-
-          <p className="mt-6 max-w-2xl text-base font-medium">
-            That&apos;s the moment nothing else catches. Ordino is built to catch it before
-            sign-off.
-          </p>
         </div>
       </section>
 
