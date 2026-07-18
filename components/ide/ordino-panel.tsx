@@ -25,6 +25,9 @@ const DEPENDENT_AREAS_PROMPT =
 const SUGGESTED_PROMPTS = [
   "I have finished developing the feature. Please update tests and execute them locally.",
   DEPENDENT_AREAS_PROMPT,
+  "Is the loyalty points requirement (BOOK-510) ready for development?",
+  "How should we test the loyalty points feature?",
+  "Have any tests auto-healed recently?",
 ];
 
 function escapeRegExp(value: string): string {

@@ -1,6 +1,9 @@
+import { autoHealingSteps } from "@/lib/ide/auto-healing-fixture";
 import { bugFixture } from "@/lib/ide/bug-fixture";
 import { impactAnalysisSteps } from "@/lib/ide/impact-analysis-fixture";
+import { requirementAnalysisSteps } from "@/lib/ide/requirement-analysis-fixture";
 import { testAutomationSteps } from "@/lib/ide/test-automation-fixture";
+import { testPlanningSteps } from "@/lib/ide/test-planning-fixture";
 import type { IdeScriptedStep } from "@/lib/ide/types";
 
 const BUG_KEYWORDS = [
@@ -22,6 +25,26 @@ export interface IdeRoutedResponse {
 
 export function routeIdeMessage(message: string): IdeRoutedResponse {
   const normalized = message.toLowerCase();
+
+  const matchesRequirementAnalysis =
+    normalized.includes("book-510") ||
+    normalized.includes("ready for development") ||
+    normalized.includes("acceptance criteria");
+  if (matchesRequirementAnalysis) {
+    return { steps: requirementAnalysisSteps };
+  }
+
+  const matchesTestPlanning =
+    normalized.includes("how should we test") || normalized.includes("test plan");
+  if (matchesTestPlanning) {
+    return { steps: testPlanningSteps };
+  }
+
+  const matchesAutoHealing =
+    normalized.includes("auto-heal") || normalized.includes("selector drift");
+  if (matchesAutoHealing) {
+    return { steps: autoHealingSteps };
+  }
 
   const matchesTestAutomation =
     normalized.includes("update tests and execute") ||
