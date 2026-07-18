@@ -1,4 +1,4 @@
-import { Bot, Code2, FileText, Monitor, SquareTerminal } from "lucide-react";
+import { Bot, Code2, FileText, FlaskConical, Monitor, SquareTerminal } from "lucide-react";
 
 import { ProductSurfaceCard } from "@/components/home/product-surface-card";
 import { buttonVariants } from "@/components/ui/button";
@@ -44,15 +44,26 @@ export default function Home() {
             Four product-surface ideas for the same concept. Pick one to demo.
           </p>
         </div>
-        <a
-          href="/design-brief.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={buttonVariants({ variant: "default", size: "lg" })}
-        >
-          <FileText className="h-4 w-4" />
-          Read the Design Brief
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            href="/research-findings.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "outline", size: "lg" })}
+          >
+            <FlaskConical className="h-4 w-4" />
+            Research Findings
+          </a>
+          <a
+            href="/design-brief.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "default", size: "lg" })}
+          >
+            <FileText className="h-4 w-4" />
+            Read the Design Brief
+          </a>
+        </div>
       </div>
       <div className="mb-10 rounded-lg border border-border bg-card p-4">
         <h2 className="text-sm font-semibold">The scenario</h2>
