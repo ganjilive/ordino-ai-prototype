@@ -175,12 +175,12 @@
     <h2>The problem</h2>
     <p>AI is writing code faster than QA can verify it. The average developer now submits 7,839 lines of code per month, up from 4,450 a year ago — a 76% increase — and over 85% of enterprise QA teams report that AI code generation has created a testing bottleneck they can't keep pace with. The agentic era needs agentic methods of quality assurance, not more manual QA headcount.</p>
     <p>For a quality owner working across a product built from many services and repos, that bottleneck shows up as blind spots, not just backlog: when a developer changes one piece, nothing today tells the quality owner what else it breaks — until CI fails somewhere else, hours or days later, often after they've already signed off on the change.</p>
-    <p>This isn't hypothetical. In interviews with three developers, all confirmed they'd experienced this pain firsthand — including one at a large company where many modules combine into a single product. All three said the same thing: they want to know what's affected <strong>before opening a pull request</strong>, not after — the same visibility a quality owner needs before approving a merge or a release.</p>
+    <p>Practically, that's a prioritization problem, not a coverage problem. A quality owner can't run the full suite for every change and still keep pace with how fast that change ships — and today, nothing tells them with confidence which tests actually matter for a given change and which don't. Research bears this out: 60% of organizations already ship untested code, citing sheer volume as the leading reason — not carelessness, but not knowing where to focus. In interviews with three developers, that same gap showed up concretely: the cross-repo blind spots above meant nobody could say which tests actually covered a change until it had already shipped.</p>
     <div class="quote">
-      "I want to know, at commit time, in my own terminal, which other repos are affected and whether existing tests actually cover that change — before I open the PR."
-      <cite>— synthesized from developer interviews</cite>
+      "I don't have time to run everything, and I don't have a reliable way to know which tests actually matter for this change."
+      <cite>— synthesized from developer interviews, reframed to the quality owner's seat</cite>
     </div>
-    <p class="muted">This single constraint — <em>before the PR exists</em> — rules out most of the current market. CI checks, PR bots, and post-merge coverage tools all live too late to solve it. This is the hero problem the rest of the platform is built around.</p>
+    <p class="muted">This single constraint — knowing what to test, <em>before the PR exists</em> — rules out most of the current market. CI checks, PR bots, and post-merge coverage tools all live too late to solve it. This is the hero problem the rest of the platform is built around.</p>
   </section>
 
   <section>
