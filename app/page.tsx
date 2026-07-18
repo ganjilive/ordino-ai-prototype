@@ -1,4 +1,4 @@
-import { Bot, Code2, FileText, FlaskConical, Monitor, SquareTerminal } from "lucide-react";
+import { Bot, Code2, FileText, FlaskConical, Megaphone, Monitor, SquareTerminal } from "lucide-react";
 
 import { ProductSurfaceCard } from "@/components/home/product-surface-card";
 import { buttonVariants } from "@/components/ui/button";
@@ -62,6 +62,13 @@ export default function Home() {
           >
             <FileText className="h-4 w-4" />
             Read the Design Brief
+          </a>
+          <a
+            href="/marketing"
+            className={buttonVariants({ variant: "outline", size: "lg" })}
+          >
+            <Megaphone className="h-4 w-4" />
+            View Marketing Page
           </a>
         </div>
       </div>
