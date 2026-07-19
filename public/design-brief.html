@@ -185,7 +185,7 @@
 
   <section>
     <h2>Architecture at a glance</h2>
-    <p>The quality owner works with Ordino directly — not through a coding agent as an intermediary. Ordino runs alongside them, always-on, and separately connects out to the tools and agents already in use at the org.</p>
+    <p>The quality owner works with Ordino directly — not through a coding agent as an intermediary. Ordino runs alongside them, always-on, and separately connects out to the tools already in use at the org.</p>
     <div class="arch">
       <div class="box">
         <h3>Quality owner</h3>
@@ -193,21 +193,47 @@
       </div>
       <div class="arrow">&#8646;</div>
       <div class="box">
-        <h3>Ordino (core)</h3>
-        <p>Agent-agnostic, always-on. Performs the 7 core capabilities and connects out to the tools below.</p>
+        <h3>Ordino</h3>
+        <p>Agent-agnostic, always-on. Four layers work together to perform the 7 core capabilities.</p>
       </div>
     </div>
-    <p class="muted" style="margin-top:10px;">Ordino's background watcher also notifies the quality owner proactively, independent of this loop — see "How it works" below.</p>
+
+    <h3 style="margin-top:28px; font-size:15px;">Inside Ordino</h3>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="card">
+        <span class="pill muted-pill">User interfaces</span>
+        <h3>GUI, CLI, IDE extensions</h3>
+        <p>How the quality owner reaches Ordino directly — see "How it works" below.</p>
+      </div>
+      <div class="card">
+        <span class="pill muted-pill">Integration interfaces</span>
+        <h3>Connectors to the org's tools</h3>
+        <p>Plug an org's existing repos, requirement tools, and knowledge bases into Ordino — see "What Ordino connects to" below.</p>
+      </div>
+      <div class="card">
+        <span class="pill muted-pill">QA agents</span>
+        <h3>Reasoning, with interfaces to LLMs</h3>
+        <p>Reason over what the Tools layer produces to prioritize, explain, and recommend — never to invent the underlying facts.</p>
+      </div>
+      <div class="card">
+        <span class="pill muted-pill">Tools</span>
+        <h3>Test management, automation, root cause analysis</h3>
+        <p>The deterministic layer: coverage numbers, pass/fail results, and dependency traces the QA agents reason on top of.</p>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:14px;">These four layers connect out to what an org already runs — requirement tools, knowledge bases, git repositories, test management tools, CI/CD pipelines, and communication tools — detailed in "What Ordino connects to" below. Ordino's background watcher also notifies the quality owner proactively, independent of this loop — see "How it works" below.</p>
   </section>
 
   <section>
     <h2>What Ordino connects to</h2>
-    <p>Ordino's context comes from six sources — the git repos and tools an org already runs, plus any AI agent that wants to call it:</p>
+    <p>Ordino's context comes from seven sources — the git repos and tools an org already runs, plus any AI agent that wants to call it:</p>
     <div class="inputs">
       <div class="box">Git repositories<span>Multiple repos — cross-repo dependency &amp; risk knowledge</span></div>
       <div class="box">Requirement management tools<span>Jira, Confluence — what should be tested</span></div>
       <div class="box">Test management tools<span>Qase, TestRail, Xray — existing cases, coverage, execution history</span></div>
       <div class="box">Knowledge bases<span>Confluence, Notion — product context and prior decisions</span></div>
+      <div class="box">CI/CD pipelines<span>GitHub Actions, Jenkins, CircleCI — trigger checks and surface results where builds already run</span></div>
       <div class="box">Communication tools<span>Slack etc. — who to notify, and how</span></div>
       <div class="box">Other AI agents<span>Claude Code, Cursor, specialized agents — invoke Ordino via MCP</span></div>
     </div>
