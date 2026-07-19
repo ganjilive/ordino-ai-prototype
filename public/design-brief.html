@@ -558,11 +558,32 @@
         <p>The continuously-updated, cross-org context — repos, requirements, test history, prior decisions — and the QA agents that reason over it to decide what actually matters: what to test, what to prioritize, and what a change puts at risk, across all 7 capabilities, not blast radius alone. This is inherently a hosted, standing service, and it can't be replicated by a better prompt or diffused into a frontier model's training — a live, org-specific knowledge graph is the actual differentiator, so it's what we charge for. Team-scale notification intelligence and enterprise controls (permissions, audit, SSO) round out the hosted tier.</p>
       </div>
     </div>
+    <div class="grid3" style="margin-top:20px;">
+      <div class="card">
+        <span class="pill muted-pill">Team</span>
+        <h3 style="font-size:22px; margin-top:8px;">$999<span style="font-size:13px; font-weight:400; color:var(--muted);">/mo</span></h3>
+        <p class="muted" style="margin-bottom:8px;">Up to 10 repos &middot; up to 25 users</p>
+        <p>All 7 capabilities, open-source Tools self-hostable, weekly agentic-action allotment included.</p>
+      </div>
+      <div class="card hero">
+        <span class="pill">Growth &middot; most teams land here</span>
+        <h3 style="font-size:22px; margin-top:8px;">$2,999<span style="font-size:13px; font-weight:400;">/mo</span></h3>
+        <p style="margin-bottom:8px;">Up to 50 repos &middot; up to 150 users</p>
+        <p>Everything in Team, sized for an org running real cross-repo blast-radius and auto-healing workloads.</p>
+      </div>
+      <div class="card">
+        <span class="pill muted-pill">Enterprise</span>
+        <h3 style="font-size:22px; margin-top:8px;">Custom</h3>
+        <p class="muted" style="margin-bottom:8px;">Beyond either limit</p>
+        <p>SSO, audit, dedicated support, custom agentic-usage caps.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:8px; font-size:12px;">Whichever limit — repos or users — a team hits first sets the tier. No hard cliff at the boundary: a small per-unit overage applies just past a cap before a full tier upgrade is needed.</p>
     <div class="callout" style="margin-top:20px;">
       <h3>Pricing shape</h3>
       <p style="margin-top:6px;">Not per seat: there's usually only one quality owner per team, sometimes one per several teams — the role is structurally scarce, and pricing per seat would cap revenue at a tiny number regardless of value delivered, while taxing exactly the buyer we most want using Ordino daily.</p>
       <p style="margin-top:10px;">Priced against consolidation instead: the customer's real alternative isn't "pay nothing," it's paying separately for the point tools Ordino replaces. A mid-size team (6–15 developers) typically already runs a test-management tool (Qase, TestRail — $30–38/user/month), an AI test-automation tool (Mabl — $450–3,000/month depending on scale), and an AI code-review or RCA point tool ($12–38/user/month) — roughly <strong>$1,800–2,500/month</strong> before flaky-test tooling, and before anything Ordino does that has no point-tool market at all (test planning, requirement analysis, blast radius).</p>
-      <p style="margin-top:10px;"><strong>Banded by repos and users</strong> — whichever limit a team hits first, priced below that composite: <strong>Team</strong> (up to 10 repos, up to 25 users) starting at <strong>$999/month</strong>; <strong>Growth</strong> (up to 50 repos, up to 150 users) starting at <strong>$2,999/month</strong>; <strong>Enterprise</strong> (beyond either limit) custom-quoted, same as every competitor above. A user cap alongside the repo cap catches orgs running one large monorepo — repo count alone would misprice a 200-engineer monorepo shop into the cheapest tier, despite matching Enterprise in scale. <strong>Seats within each tier's cap stay bundled, not metered</strong> — the user limit is a tier ceiling, not a per-seat charge; a 5-person team across 40 services still needs Ordino more than 50 people in one repo. <strong>No hard cliff at the boundary</strong>: a small per-unit overage (an extra repo or user just past a tier's cap) is priced incrementally rather than forcing an immediate 3x jump to the next tier — avoiding both Datadog's bill-shock complaints from fully open-ended metering and the renegotiation friction of a hard wall.</p>
+      <p style="margin-top:10px;"><strong>Banded by repos and users</strong>, not a single axis — whichever limit a team hits first sets the tier (see plan comparison above), priced below that composite. A user cap alongside the repo cap catches orgs running one large monorepo — repo count alone would misprice a 200-engineer monorepo shop into the cheapest tier, despite matching Enterprise in scale. <strong>Seats within each tier's cap stay bundled, not metered</strong> — the user limit is a tier ceiling, not a per-seat charge; a 5-person team across 40 services still needs Ordino more than 50 people in one repo.</p>
       <p style="margin-top:10px;"><strong>Annual billing at a ~17% discount</strong> ("2 months free"), monthly available at full price — standard SaaS practice, and it converts better framed as free months than as a percentage. Materially improves cash flow and CAC payback versus month-to-month alone.</p>
       <p style="margin-top:10px;"><strong>Agentic actions are capped by session and week, not a flat monthly credit pool</strong> — mirroring Cursor and Claude Code: a rolling session window plus a weekly cap on agentic work (test runs generated, RCA investigations, requirements analyzed, PRs risk-assessed), with overage beyond the weekly cap billed at current LLM-API rates instead of a fixed price-per-credit. This is the same reason Claude Code lets Max-plan users overflow into pay-per-token billing once they hit a weekly limit, rather than promising unlimited usage at a fixed price: it keeps Ordino's margin insulated if our own LLM provider raises prices. (Metering AI-heavy usage at all isn't unusual in this space either — Mabl, Qase, CodeRabbit, Greptile, and Qodo all do it via prepaid credit pools; session/weekly caps are simply the more margin-safe version of the same idea.)</p>
       <p class="muted" style="margin-top:10px;">Directional starting point for the team to pressure-test, not a finalized price — grounded in July 2026 competitor pricing research (Mabl, QA Wolf, Qase, TestRail, CodeRabbit, Greptile, Qodo, BuildPulse, Cursor, Claude Code, GitHub Copilot).</p>
